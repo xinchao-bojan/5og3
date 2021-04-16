@@ -16,22 +16,30 @@ class UpdateEdOrganizationView(APIView):
 
 
 
-class ListEmpOrganizationView(APIView):
+class ListEmpCompanyView(APIView):
 
-class AddEmpOrganizationView(APIView):
+class AddEmpCompanyView(APIView):
 
-class DeleteEmpOrganizationView(APIView):
+class DeleteEmpCompanyView(APIView):
 
-class UpdateEmpOrganizationView(APIView):
+class UpdateEmpCompanyView(APIView):
 
 
 
-class ListPracticeOrganizationView(APIView):
+class ListPracticeView(APIView):
+    def get(self, request):
 
-class AddOrganizationView(APIView):
+        return Response(serializer.)
 
-class DeleteEdOrganizationView(APIView):
 
-class UpdateEdOrganizationView(APIView):
+
+class AddPracticeView(APIView):
+
+class DeletePracticeView(APIView):
+
+class UpdatePracticeView(APIView):
+
+
+class
 
 
