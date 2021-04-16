@@ -1,7 +1,11 @@
 from django.conf.urls import url
-from django.urls import include
+from django.urls import path, include
+
+from .views import *
 
 urlpatterns = [
-    url(r'^auth/', include('djoser.urls')),
-    url(r'^auth/', include('djoser.urls.jwt')),
+
+
+    path('delete/', DeleteMyselfView.as_view()),
+    path('update/', UpdateMyselfView.as_view()),
 ]
