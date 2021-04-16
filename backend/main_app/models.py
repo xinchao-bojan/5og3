@@ -9,7 +9,6 @@ class Internship(models.Model):
     input_emp_competence = models.ManyToManyField('EmpCompetence', related_name='input_emp_competence')
     output_emp_competence = models.ManyToManyField('EmpCompetence', related_name='output_emp_competence')
 
-
 class Practice(models.Model):
     name = models.CharField(max_length=255, verbose_name='Наименование стажировки')
     ed_organization = models.ForeignKey('EdOrganization', verbose_name='Образовательная организация',
@@ -17,7 +16,6 @@ class Practice(models.Model):
     description = models.TextField(verbose_name='Описание практики')
     input_ed_competence = models.ManyToManyField('EdCompetence', related_name='input_ed_competence')
     output_ed_competence = models.ManyToManyField('EdCompetence', related_name='output_ed_competence')
-
 
 class EdOrganization(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название образовательной организации')
@@ -33,6 +31,6 @@ class EmpCompetence(models.Model):
 class EmpCompany(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название организации-работодателя')
 
-
 class Skills(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название навыка')
+

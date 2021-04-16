@@ -28,18 +28,28 @@ class UpdateEmpCompanyView(APIView):
 
 class ListPracticeView(APIView):
     def get(self, request):
-
-        return Response(serializer.)
+        serializer = PracticeSerializer(Practice.)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    def
 
 
 
 class AddPracticeView(APIView):
+    def post(self, request):
+
 
 class DeletePracticeView(APIView):
 
 class UpdatePracticeView(APIView):
 
+class ConfirmPracticeView(APIView):
 
-class
+class GiveCompetenceView(APIView):
 
+class ListInternshipView(APIView):
 
+class ResponseInternshipView(APIView):
+
+class AcceptStudentOnInternshipView(APIView):
+
+class CompleteInternship(APIView):
