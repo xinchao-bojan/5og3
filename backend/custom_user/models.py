@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.utils.translation import gettext_lazy as _
 
+
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None):
         if not email:
@@ -15,8 +16,8 @@ class CustomUserManager(BaseUserManager):
 
     def create_superuser(self, email, password):
         user = self.create_user(email=self.normalize_email(email), password=password)
+        user.is_admin = True
         user.is_staff = True
-        user.is_active = True
         user.is_superuser = True
         user.save(using=self._db)
         return user
@@ -29,18 +30,18 @@ class CustomUser(AbstractBaseUser):
         EMPLOYER = 'EMPLOYER', 'Employer'
         EDWORKER = 'EDWORKER', 'Edworker'
 
-    type =models.CharField(_('Type'))
+    type = models.CharField(_('Type'), max_length=15, choices=Type.choices, default=Type.STUDENT)
 
     email = models.EmailField(verbose_name='Адрес электронной почты', max_length=63, unique=True)
     first_name = models.CharField(max_length=127, verbose_name='Имя')
     last_name = models.CharField(max_length=127, verbose_name='Фамилия')
-
     date_joined = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(auto_now=True)
 
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    user = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     # REQUIRED_FIELDS = ['first_name', 'last_name', ]
@@ -58,10 +59,111 @@ class CustomUser(AbstractBaseUser):
     # def has_module_perms(self, app_label):
     #     return True
 
-    class Student(models.Model):
 
-    class Admin(models.Model):
+class StudentMore(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    FEMALE = 0
+    MALE = 1
+    SEX_CHOICER = (
+        (FEMALE, 'Female'),
+        (MALE, 'Male'),
+    )
+    sex = models.IntegerField(choices=SEX_CHOICER)
+    date_of_birth = models.DateField(blank=True, null=True)
 
-    class Employer(models.Model):
 
-    class EdWorker(models.Model):
+class StudentManager(models.Manager):
+    def get_queryset(self, *args, **kwargs):
+        return super().get_queryset(*args, **kwargs).filter(type=CustomUser.Type.STUDENT)
+
+
+class Student(CustomUser):
+    objects = StudentManager()
+
+    @property
+    def more(self):
+        return self.studentmore
+
+    class Meta:
+        proxy = True
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.type = CustomUser.Type.STUDENT
+        return super().save(*args, **kwargs)
+
+
+class AdminMore(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+
+
+class AdminManager(models.Manager):
+    def get_queryset(self, *args, **kwargs):
+        return super().get_queryset(*args, **kwargs).filter(type=CustomUser.Type.ADMIN)
+
+
+class Admin(CustomUser):
+    objects = AdminManager()
+
+    @property
+    def more(self):
+        return self.adminmore
+
+    class Meta:
+        proxy = True
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.type = CustomUser.Type.ADMIN
+        return super().save(*args, **kwargs)
+
+
+class EmployerMore(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+
+
+class EmployerManager(models.Manager):
+
+    def get_queryset(self, *args, **kwargs):
+        return super().get_queryset(*args, **kwargs).filter(type=CustomUser.Type.EMPLOYER)
+
+
+class Employer(CustomUser):
+    objects = EmployerManager()
+
+    @property
+    def more(self):
+        return self.employermore
+
+    class Meta:
+        proxy = True
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.type = CustomUser.Type.EMPLOYER
+        return super().save(*args, **kwargs)
+
+
+class EdWorkerMore(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+
+
+class EdWorkerManager(models.Manager):
+    def get_queryset(self, *args, **kwargs):
+        return super().get_queryset(*args, **kwargs).filter(type=CustomUser.Type.EDWORKER)
+
+
+class EdWorker(CustomUser):
+    objects = EdWorkerManager()
+
+    @property
+    def more(self):
+        return self.edworkermore
+
+    class Meta:
+        proxy = True
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.type = CustomUser.Type.EDWORKER
+        return super().save(*args, **kwargs)
