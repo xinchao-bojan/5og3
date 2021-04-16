@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 
 class Internship(models.Model):
@@ -10,15 +11,16 @@ class Internship(models.Model):
 class EdOrganization(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название образовательной организации')
 
+
 class EdCompetence(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название компетенции')
-    emp_competence = models.ManyToManyField(EmpCompetence)
+    emp_competence = models.ManyToManyField('EmpCompetence')
+
 
 class EmpCompetence(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название компетенции')
     ed_competence = models.ManyToManyField(EdCompetence)
 
+
 class EmpCompany(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название организации-работодателя')
-    
-    
