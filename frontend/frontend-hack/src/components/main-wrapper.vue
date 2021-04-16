@@ -1,9 +1,8 @@
 <template>
   <div class="v-main-wrapper">
     <div class="container">
-
+      <router-view/>
     </div>
-    <router-view/>
     <!-- Здесь будут отображаться компоненты, путь к которым ты пропишешь в router/index.js-->
   </div>
 </template>
