@@ -7,7 +7,7 @@ class Internship(models.Model):
     emp_company = models.ForeignKey('EmpCompany', verbose_name='Работодатель', on_delete=models.CASCADE)
     description = models.TextField(verbose_name='Описание стажировки')
     input_emp_competence = models.ManyToManyField('EmpCompetence', related_name='input_emp_competence')
-    output_emp_competence = models.ManyToManyField('EmpCompetence', related_name='input_e_competence')
+    output_emp_competence = models.ManyToManyField('EmpCompetence', related_name='output_emp_competence')
 
 
 class Practice(models.Model):
