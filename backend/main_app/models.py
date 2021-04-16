@@ -32,4 +32,3 @@ class EmpCompany(models.Model):
 
 class Skills(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название навыка')
-    
