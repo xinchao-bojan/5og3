@@ -1,8 +1,0 @@
-.git
-.idea
-/venv
-/static
-.env
-Lib/
-Scripts/
-__pycache__/
