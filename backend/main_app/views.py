@@ -28,19 +28,30 @@ class UpdateEmpCompanyView(APIView):
 
 class ListPracticeView(APIView):
     def get(self, request):
-        serializer = PracticeSerializer(Practice.)
+        serializer = PracticeSerializer(Practice.objects.all())
         return Response(serializer.data, status=status.HTTP_200_OK)
-    def
 
 
+class ListEdOrganizationPracticeView(APIView):
+    def get(self, request):
+        serializer = PracticeSerializer(Practice.objects.filter(EdOrganization = request.ed_organization))
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class AddPracticeView(APIView):
     def post(self, request):
-
+        p = Practice.objects.create(name=request.data['name'])
+        return Response('Практика создана', status=status.HTTP_200_OK)
 
 class DeletePracticeView(APIView):
+    def delete(self, request, pr_id):
+        p = Practice.objects.get(id=pr_id)
+        p.delete()
+        return Response('Практика удалена', status=status.HTTP_200_OK)
 
 class UpdatePracticeView(APIView):
+    def put(self, request, pr_id):
+        p = Practice.objects.get(id=pr_id)
+        p.
 
 class ConfirmPracticeView(APIView):
 
