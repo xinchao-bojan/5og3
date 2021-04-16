@@ -35,6 +35,7 @@ class CustomUser(AbstractBaseUser):
     email = models.EmailField(verbose_name='Адрес электронной почты', max_length=63, unique=True)
     first_name = models.CharField(max_length=127, verbose_name='Имя')
     last_name = models.CharField(max_length=127, verbose_name='Фамилия')
+
     date_joined = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(auto_now=True)
 
