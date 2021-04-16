@@ -1,9 +1,11 @@
 <template>
-  <div id="app" class="main">
-    <vHeader/>
-    <vMainWrapper/>
-    <vFooter/>
-  </div>
+  <v-app>
+    <div id="app" class="main">
+      <vHeader/>
+      <vMainWrapper/>
+      <vFooter/>
+    </div>
+  </v-app>
 </template>
 
 <script>
@@ -22,8 +24,11 @@ export default {
 
 <style>
 .main {
+  padding-top: 64px;
   display: flex;
   flex-direction: column;
   height: 100%;
+  margin: 0 auto;
+  max-width: 1170px;
 }
 </style>

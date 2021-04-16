@@ -1,5 +1,8 @@
 <template>
   <div class="v-main-wrapper">
+    <div class="container">
+
+    </div>
     <router-view/>
     <!-- Здесь будут отображаться компоненты, путь к которым ты пропишешь в router/index.js-->
   </div>
@@ -16,6 +19,11 @@ export default {
 <style lang="scss">
 .v-main-wrapper {
   flex: 1 0 auto;
-  background-color: #f7f7f7;
+  background-color: #fff;
+}
+
+.container{
+  margin: 0 auto;
+  width: 1170px;
 }
 </style>
