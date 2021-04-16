@@ -1,4 +1,4 @@
-# frontend-hackathon
+# frontend-hack
 
 ## Project setup
 ```
