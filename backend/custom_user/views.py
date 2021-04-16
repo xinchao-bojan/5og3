@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from rest_framework.exceptions import ValidationError
 
 from rest_framework.response import Response
 from .models import *
@@ -35,10 +36,10 @@ class UpdateMyselfView(APIView):
         u = request.user
         try:
             if 'sex' in request.data:
-                u.sex = request.data['sex']
+                u.more.sex = request.data['sex']
 
             if 'date_of_brith' in request.data:
-                u.date_of_brith = request.data['date_of_brith']
+                u.more.date_of_brith = request.data['date_of_brith']
 
             if 'email' in request.data:
                 u.email = request.data['email']
@@ -55,4 +56,27 @@ class UpdateMyselfView(APIView):
             return Response('Key Error', status=status.HTTP_400_BAD_REQUEST)
         u.save()
         serializer = pretty_serializer(request)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class AddStudentMoreView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def put(self, request):
+        if StudentMore.objects.get(user=request.user):
+            return Response('already exist', status=status.HTTP_202_ACCEPTED)
+        try:
+            request.user.type = CustomUser.Type.STUDENT
+            request.user.save()
+            StudentMore.objects.create(
+                user=request.user,
+                sex=request.data['sex'],
+                date_of_birth=request.data['date'],
+                ed_organization=EdOrganization.objects.get(pk=request.data['ed_organization'])
+            )
+        except ValidationError:
+            return Response('ValidationError', status=status.HTTP_400_BAD_REQUEST)
+        except KeyError:
+            return Response('Key Error', status=status.HTTP_400_BAD_REQUEST)
+        serializer = StudentSerializer(request.user, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)

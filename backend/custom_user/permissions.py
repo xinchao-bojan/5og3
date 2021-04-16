@@ -2,59 +2,44 @@ from rest_framework.permissions import BasePermission
 
 from .models import CustomUser
 
-def base(user):
-    return bool(user and user.is_authenticated)
-
 
 class IsAdmin(BasePermission):
     message = 'It is wrong neighborhood for u (staff)'
 
     def has_permission(self, request, view):
-        if base(request.user):
-            return request.user.is_staff
-        return False
+        return request.user.is_staff
 
 
 class IsOwner(BasePermission):
     message = 'It is wrong neighborhood for u (owner)'
 
     def has_object_permission(self, request, view, obj):
-        if base(request.user):
-            return obj.user == request.user
-        return False
+        return obj.user == request.user
 
 
 class IsStudent(BasePermission):
     message = 'It is wrong neighborhood for u (student)'
 
     def has_object_permission(self, request, view, obj):
-        if base(request.user):
-            return request.user.type == CustomUser.Type.STUDENT
-        return False
+        return request.user.type == CustomUser.Type.STUDENT
 
 
 class IsAdmin(BasePermission):
     message = 'It is wrong neighborhood for u (admin)'
 
     def has_object_permission(self, request, view, obj):
-        if base(request.user):
-            return request.user.type == CustomUser.Type.ADMIN
-        return False
+        return request.user.type == CustomUser.Type.ADMIN
 
 
 class IsEmployer(BasePermission):
     message = 'It is wrong neighborhood for u (employer)'
 
     def has_object_permission(self, request, view, obj):
-        if base(request.user):
-            return request.user.type == CustomUser.Type.EMPLOYER
-        return False
+        return request.user.type == CustomUser.Type.EMPLOYER
 
 
 class IsEdWorker(BasePermission):
     message = 'It is wrong neighborhood for u (edworker)'
 
     def has_object_permission(self, request, view, obj):
-        if base(request.user):
-            return request.user.type == CustomUser.Type.EDWORKER
-        return False
+        return request.user.type == CustomUser.Type.EDWORKER

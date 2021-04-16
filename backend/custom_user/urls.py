@@ -5,7 +5,7 @@ from .views import *
 
 urlpatterns = [
 
-
     path('delete/', DeleteMyselfView.as_view()),
     path('update/', UpdateMyselfView.as_view()),
+    path('add/student/', AddStudentMoreView.as_view()),
 ]

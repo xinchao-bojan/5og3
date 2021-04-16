@@ -2,12 +2,14 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.utils.translation import gettext_lazy as _
 
+from main_app.models import EdOrganization
+
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **kwargs):
         if not email:
             raise ValueError('Customer must have all necessary information')
-        user = self.model(email=self.normalize_email(email), **kwargs, type=CustomUser.Type.ADMIN)
+        user = self.model(email=self.normalize_email(email), **kwargs)
         user.set_password(password)
         user.save(using=self._db)
 
@@ -16,6 +18,7 @@ class CustomUserManager(BaseUserManager):
 
     def create_superuser(self, email, password, **kwargs):
         user = self.create_user(email=self.normalize_email(email), password=password, **kwargs)
+        user.type = CustomUser.Type.ADMIN
         user.is_admin = True
         user.is_staff = True
         user.is_superuser = True
@@ -31,7 +34,7 @@ class CustomUser(AbstractBaseUser):
         EMPLOYER = 'EMPLOYER', 'Employer'
         EDWORKER = 'EDWORKER', 'Edworker'
 
-    type = models.CharField(_('Type'), max_length=15, choices=Type.choices, default=Type.STUDENT)
+    type = models.CharField(_('Type'), max_length=15, choices=Type.choices, blank=True)
 
     email = models.EmailField(verbose_name='Адрес электронной почты', max_length=63, unique=True)
     first_name = models.CharField(max_length=127, verbose_name='Имя')
@@ -41,7 +44,7 @@ class CustomUser(AbstractBaseUser):
     last_login = models.DateTimeField(auto_now=True)
 
     is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     user = models.BooleanField(default=False)
 
@@ -49,17 +52,25 @@ class CustomUser(AbstractBaseUser):
     REQUIRED_FIELDS = ['first_name', 'last_name', ]
     objects = CustomUserManager()
 
+    def save(self, *args, **kwargs):
+        if self.type:
+            self.is_active = True
+        super().save(*args, **kwargs)
+        self.first_name = self.first_name.capitalize()
+        self.last_name = self.last_name.capitalize()
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.email
 
     def make_active(self):
         self.is_active = True
 
-    # def has_perm(self, perm, obj=None):
-    #     return self.is_admin
-    #
-    # def has_module_perms(self, app_label):
-    #     return True
+    def has_perm(self, perm, obj=None):
+        return self.is_staff
+
+    def has_module_perms(self, app_label):
+        return True
 
 
 class StudentMore(models.Model):
@@ -72,6 +83,7 @@ class StudentMore(models.Model):
     )
     sex = models.IntegerField(choices=SEX_CHOICER)
     date_of_birth = models.DateField(blank=True, null=True)
+    ed_organization = models.ForeignKey(EdOrganization, on_delete=models.CASCADE)
 
 
 class StudentManager(models.Manager):
@@ -92,7 +104,6 @@ class Student(CustomUser):
     def save(self, *args, **kwargs):
         if not self.pk:
             self.type = CustomUser.Type.STUDENT
-            self.is_active = True
         return super().save(*args, **kwargs)
 
 
@@ -123,6 +134,7 @@ class Admin(CustomUser):
 
 class EmployerMore(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    ed_organization = models.ForeignKey(EdOrganization, on_delete=models.CASCADE)
 
 
 class EmployerManager(models.Manager):
@@ -170,3 +182,4 @@ class EdWorker(CustomUser):
         if not self.pk:
             self.type = CustomUser.Type.EDWORKER
         return super().save(*args, **kwargs)
+
