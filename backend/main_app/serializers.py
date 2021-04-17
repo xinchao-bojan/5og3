@@ -49,10 +49,3 @@ class SkillsSerializer(serializers.ModelSerializer):
         depth = 1
         model = Skills
         fields = '__all__'
-
-
-class ApprovalPracticeSerializer(serializers.ModelSerializer):
-    class Meta:
-        depth = 1
-        model = ApprovalPractice
-        fields = '__all__'

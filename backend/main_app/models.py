@@ -34,6 +34,7 @@ ED
 
 class EdOrganization(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название образовательной организации')
+    competence = models.ManyToManyField('EdCompetence')
 
     def __str__(self):
         return self.name
@@ -52,7 +53,7 @@ SubUser
 '''
 
 
-class Student(models.Model):
+class StudentM(models.Model):
     user = models.OneToOneField(StudentMore, on_delete=models.CASCADE)
     ed_organization = models.ForeignKey(EdOrganization, on_delete=models.CASCADE)
 
