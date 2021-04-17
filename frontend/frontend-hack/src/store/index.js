@@ -25,7 +25,7 @@ export default new Vuex.Store({
       console.log("token: ", localStorage.getItem('token'));
       return axios
         .request({
-          url: "https://d7709109e4f4.ngrok.io/api/listinternship/",
+          url: "https://9021260458c0.ngrok.io/api/practice/all/",
           method: "GET",
           headers: {
             Authorization: "Bearer " + localStorage.getItem('token'),
@@ -41,24 +41,9 @@ export default new Vuex.Store({
           commit('SET_EMPLOYERS_TO_STATE', employers.data);
           console.log("commit articles", employers.data);
           return employers;
-        })
-      // return axios('https://d7709109e4f4.ngrok.io/api/listinternship/', {
-      //   method: "GET"
-      // })
-      //   .then((employers) => {
-      //     console.log("commit articles", employers.data);
-      //     commit('SET_EMPLOYERS_TO_STATE', employers.data);
-      //     console.log("commit articles", employers.data);
-      //     return employers;
-      //   },
-      //     reason => {
-      //       console.log("reason")
-      //       console.log(reason)
-      //     })
-      //   .catch((error) => {
-      //     console.log(error);
-      //     return error;
-      //   })
+        }).catch(function (error) {
+          console.error(error.response);
+        });
     },
     LOGOUT({ commit }) {
       return new Promise((resolve) => {
@@ -75,7 +60,7 @@ export default new Vuex.Store({
     EMPLOYERS(state) {
       return state.employers;
     },
-    //isAuthenticated: state => !!state.token,
+    isAuthenticated: state => !!state.token,
   },
   modules: {
   }

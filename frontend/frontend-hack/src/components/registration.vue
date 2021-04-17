@@ -6,6 +6,9 @@
         <button class="btn-login not-active" v-on:click="isActiveBtn = false">
           Я работодатель
         </button>
+        <button class="btn-login not-active">
+          Образовательная организация
+        </button>
       </div>
       <form action="">
         <input
@@ -89,6 +92,9 @@
           Я студент
         </button>
         <button class="btn-login">Я работодатель</button>
+        <button class="btn-login not-active">
+          Образовательная организация
+        </button>
       </div>
       <form action="">
         <input
@@ -187,7 +193,7 @@ export default {
       e.preventDefault();
       // const headers = "Access-Control-Allow-Origin: *"
       axios
-        .post("https://dafbb6132c6f.ngrok.io/api/auth/users/", {
+        .post("https://9021260458c0.ngrok.io/api/auth/users/", {
           first_name: this.firstname,
           last_name: this.secondname,
           email: this.email,
@@ -196,7 +202,7 @@ export default {
         .then((response) => {
           console.log("response status: ", response.status);
           axios
-            .post("https://dafbb6132c6f.ngrok.io/api/auth/jwt/create/", {
+            .post("https://9021260458c0.ngrok.io/api/auth/jwt/create/", {
               email: this.email,
               password: this.password,
             })
@@ -206,7 +212,7 @@ export default {
               console.log("JWT response data: ", response.data.access);
               axios
                 .request({
-                  url: "https://dafbb6132c6f.ngrok.io/api/addinfo/",
+                  url: "https://9021260458c0.ngrok.io/api/addinfo/",
                   method: "put",
                   headers: {
                     Authorization: "Bearer " + response.data.access,
@@ -274,11 +280,15 @@ export default {
   color: #2c4eff;
   border: 1px solid #2c4eff;
 }
-
+input:focus {
+  border-radius: 10px;
+  border: #fff;
+}
 .default-input {
   padding: 10px 18px;
   background-color: #f6f6f6;
   border: 1px solid black;
   margin-bottom: 18px;
+  border-radius: 10px;
 }
 </style>

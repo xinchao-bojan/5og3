@@ -19,14 +19,18 @@
             </v-row>
             <v-row>
               <v-col cols="6">
-                <v-btn rounded color="#BF1A42" class="btn" width="100%">
-                  Хочу стажироваться
-                </v-btn>
+                <router-link to="/EmployersList">
+                  <v-btn rounded color="#BF1A42" class="btn" width="100%">
+                    Хочу стажироваться
+                  </v-btn>
+                </router-link>
               </v-col>
               <v-col cols="6">
-                <v-btn rounded color="#fff" outlined class="btn" width="100%">
-                  Я работодатель
-                </v-btn>
+                <router-link to="/StudentSearchPage">
+                  <v-btn rounded color="#fff" outlined class="btn" width="100%">
+                    Я работодатель
+                  </v-btn>
+                </router-link>
               </v-col>
             </v-row>
           </v-col>

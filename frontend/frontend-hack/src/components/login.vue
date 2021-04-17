@@ -72,7 +72,7 @@ export default {
     sendStudent(e) {
       e.preventDefault();
       axios
-        .post("https://d7709109e4f4.ngrok.io/api/auth/jwt/create/", {
+        .post("https://9021260458c0.ngrok.io/api/auth/jwt/create/", {
           email: this.email,
           password: this.password,
         })
