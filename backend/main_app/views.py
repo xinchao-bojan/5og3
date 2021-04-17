@@ -66,8 +66,8 @@ class StartPracticeRequestView(APIView):
             return Response('lol')
 
         for c in request.data['ed_competence']:
-            u.ed_competence.add(EdCompetence.objects.get(pk=c['pk'],competence=))
+            u.ed_competence.add(u.ed_organization.competence.get(pk=c['pk']))
         for c in request.data['emp_competence']:
-            u.emp_competence.add(u.ed_competence.emp_competence.get(pk=c['pk']))
-        serializer = StudentMSerializer(u, context={'request': request})
-        return Response(serializer.data)
+            u.emp_competence.add(u.ed_competence.get())
+            serializer = StudentMSerializer(u, context={'request': request})
+            return Response(serializer.data)
