@@ -2,7 +2,7 @@
   <header class="header">
           <v-app-bar
             app
-            color="#2C4EFF"
+            color="#fff"
             class="app_bar"
             
           >
@@ -10,24 +10,35 @@
             <v-col>
               <v-row>
                 <v-col cols="1">
-                  <router-link to="/">
-                    <p class="app_text">Главная</p>
+                  <router-link to="/" class="app_text">
+                    Главная
                   </router-link>
                 </v-col>
-                <v-col cols="2-3">
-                  <router-link to="/EmployersList ">
-                    <p class="app_text">Рейтинг работодателей</p>
+                <v-col cols="3">
+                  <v-layout justify-center>                  
+                  <router-link to="/EmployersList" class="app_text">
+                    
+                      Рейтинг работодателей
+                    
                   </router-link>
+                  </v-layout>
                 </v-col>
-                <v-col cols="4">
+                <v-col cols="3">
                   <p class="app_text">Образовательные организации</p>
                 </v-col>
                 <v-spacer>
 
                 </v-spacer>
-                <v-col cols="11-12" justify-end>
+                <v-col cols="2" justify-end>
                   <v-layout justify-end>
-                    <p class="app_text">Профиль</p>
+                    <p class="app_text">Зарегистрироваться</p>
+                  </v-layout>
+                  
+                </v-col>          
+                <v-col cols="1" class="vhod">
+                  <div class="span"></div>
+                  <v-layout justify-end>
+                    <p class="app_text">Войти</p>
                   </v-layout>
                   
                 </v-col>          
@@ -65,7 +76,7 @@ header {
 }
 
 .app_text{
-  color: rgb(255, 255, 255);
+  color: #000;
   font-family: Roboto;
   text-decoration: none;
   font-style: normal;
@@ -73,5 +84,21 @@ header {
   font-size: 18px;
   line-height: 21px;
   margin: 0;
+  &:hover{
+    color: #1319AD;
+  }
+  &:focus{
+    color: #0D1289;
+  }
+}
+
+.vhod{
+  display: inline-flex;
+}
+
+.span{
+  width: 2px;
+  height: 100%;
+  background-color: #000;
 }
 </style>
