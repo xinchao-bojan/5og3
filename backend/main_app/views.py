@@ -8,43 +8,8 @@ from .serializers import *
 from custom_user.permissions import *
 
 
-#
-#
-# class ListEdOrganizationView(APIView):
-#
-#
-# class AddEdOrganizationView(APIView):
-#
-#
-# class DeleteEdOrganizationView(APIView):
-#
-#
-# class UpdateEdOrganizationView(APIView):
-#
-#
-# class ListEmpCompanyView(APIView):
-#
-#
-# class AddEmpCompanyView(APIView):
-#
-#
-# class DeleteEmpCompanyView(APIView):
-#
-#
-# class UpdateEmpCompanyView(APIView):
-#
-#
-# class AddPracticeView(APIView):
-#
-#
-# class DeletePracticeView(APIView):
-#
-#
-# class UpdatePracticeView(APIView):
-
-
 class ListPracticeView(generics.ListAPIView):
-    permission_classes = [permissions.IsAuthenticated, IsAdmin]
+    permission_classes = [permissions.IsAuthenticated, IsStudent or IsEdWorker]
     serializer_class = PracticeSerializer
     queryset = None
 
@@ -53,3 +18,9 @@ class ListPracticeView(generics.ListAPIView):
         self.queryset = Practice.objects.filter(
             ed_organization=StudentMore.objects.get(user=request.user).ed_organization)
         return super().list(request)
+
+
+class StartPracticeRequestView(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsStudent]
+
+

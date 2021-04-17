@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 
+from custom_user.models import StudentMore, EdWorkerMore
+
 
 class Internship(models.Model):
     name = models.CharField(max_length=255, verbose_name='Наименование стажировки')
@@ -25,6 +27,11 @@ class Practice(models.Model):
         return self.name
 
 
+'''
+ED
+'''
+
+
 class EdOrganization(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название образовательной организации')
 
@@ -33,11 +40,31 @@ class EdOrganization(models.Model):
 
 
 class EdCompetence(models.Model):
-    name = models.CharField(max_length=255, verbose_name='Название компетенции')
+    name = models.CharField(max_length=255, verbose_name='Название компетенции', unique=True)
     emp_competence = models.ManyToManyField('EmpCompetence', related_name='emp_to_ed_competence', blank=True)
 
     def __str__(self):
         return self.name
+
+
+'''
+SubUser
+'''
+
+
+class Student(models.Model):
+    user = models.OneToOneField(StudentMore, on_delete=models.CASCADE)
+    ed_organization = models.ForeignKey(EdOrganization, on_delete=models.CASCADE)
+
+
+class Worker(models.Model):
+    user = models.OneToOneField(EdWorkerMore, on_delete=models.CASCADE)
+    ed_organization = models.ForeignKey(EdOrganization, on_delete=models.CASCADE)
+
+
+'''
+EMP
+'''
 
 
 class EmpCompetence(models.Model):
