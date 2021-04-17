@@ -15,15 +15,16 @@ class Internship(models.Model):
     rate = models.DecimalField(default=0, decimal_places=2, max_digits=4, verbose_name='Оценка')
 
     def save(self, *args, **kwargs):
-        temp = 0
-        for c in self.reviewonemployer_set.all():
-            temp += c.rate
-        self.rate = temp / self.reviewonemployer_set.count()
-        if self.rate > 10:
-            self.rate = 10
-        if self.rate < 0:
-            self.rate = 0
-        self.emp_company.save()
+        if self.reviewonemployer_set.count() != 0:
+            temp = 0
+            for c in self.reviewonemployer_set.all():
+                temp += c.rate
+            self.rate = temp / self.reviewonemployer_set.count()
+            if self.rate > 10:
+                self.rate = 10
+            if self.rate < 0:
+                self.rate = 0
+            self.emp_company.save()
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -98,14 +99,15 @@ class StudentM(models.Model):
     rate = models.DecimalField(default=0, decimal_places=2, max_digits=4, verbose_name='Оценка')
 
     def save(self, *args, **kwargs):
-        temp = 0
-        for c in self.reviewonstudent_set.all():
-            temp += c.rate
-        self.rate = temp / self.reviewonstudent_set.count()
-        if self.rate > 10:
-            self.rate = 10
-        if self.rate < 0:
-            self.rate = 0
+        if self.reviewonstudent_set.count() != 0:
+            temp = 0
+            for c in self.reviewonstudent_set.all():
+                temp += c.rate
+            self.rate = temp / self.reviewonstudent_set.count()
+            if self.rate > 10:
+                self.rate = 10
+            if self.rate < 0:
+                self.rate = 0
 
         super().save(*args, **kwargs)
 
@@ -118,15 +120,15 @@ class EmployerM(models.Model):
     emp_company = models.ForeignKey('EmpCompany', on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.user
+        return str(self.user)
 
 
 class EdWorkerM(models.Model):
     user = models.OneToOneField(EdWorkerMore, on_delete=models.CASCADE)
-    ed_organization = models.ForeignKey('EmpCompany', on_delete=models.CASCADE)
+    ed_organization = models.ForeignKey('EdOrganization', on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.user
+        return str(self.user)
 
 
 '''
@@ -146,15 +148,16 @@ class EmpCompany(models.Model):
     rate = models.DecimalField(default=0, decimal_places=2, max_digits=4, verbose_name='Оценка')
 
     def save(self, *args, **kwargs):
-        temp = 0
-        for c in self.internship_set.all():
-            temp += c.rate
-        self.rate = temp / self.internship_set.count()
-        if self.rate > 10:
-            self.rate = 10
-        if self.rate < 0:
-            self.rate = 0
-        super.save(*args, **kwargs)
+        if self.internship_set.count() != 0:
+            temp = 0
+            for c in self.internship_set.all():
+                temp += c.rate
+            self.rate = temp / self.internship_set.count()
+            if self.rate > 10:
+                self.rate = 10
+            if self.rate < 0:
+                self.rate = 0
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
