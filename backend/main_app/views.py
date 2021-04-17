@@ -11,31 +11,14 @@ from custom_user.serializers import *
 from custom_user.permissions import IsStudent, IsEdWorker
 
 
-# class ListPracticeView(generics.ListAPIView):
-#     permission_classes = [permissions.IsAuthenticated, IsStudent or IsEdWorker]
-#     serializer_class = PracticeSerializer
-#     queryset = None
-#
-#     def get(self, request):
-#         print(StudentMore.objects.get(user=request.user))
-#         self.queryset = Practice.objects.filter(
-#             ed_organization=StudentMore.objects.get(user=request.user).ed_organization)
-#         return super().list(request)
-from ..custom_user.models import StudentMore, EmployerMore, CustomUser, EdWorkerMore
-from ..custom_user.permissions import IsEmployer
-from ..custom_user.serializers import StudentSerializer
-
-
 class CompanyListView(generics.ListAPIView):
     queryset = EmpCompany
     serializer_class = EmpCompanySerializer
-    permission_classes = [permissions.IsAuthenticated]
 
 
 class OrganizationListView(generics.ListAPIView):
     queryset = EdOrganization
     serializer_class = EdOrganizationSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
 
 class AddStudentMoreView(APIView):
@@ -58,11 +41,7 @@ class AddStudentMoreView(APIView):
                     sex=d[request.data['sex']],
                     date_of_birth=request.data['date']
                 )
-                print(request.data['ed_organization'])
-                print(request.data)
-                print(EdOrganization.objects.get(name='МИРЭА'))
-                print(EdOrganization.objects.get(
-                    name=request.data['ed_organization']))
+
                 StudentM.objects.create(user=more,
                                         ed_organization=EdOrganization.objects.get(
                                             name=request.data['ed_organization']))
@@ -81,7 +60,6 @@ class StartPracticeRequestView(generics.ListAPIView):
     queryset = None
 
     def get(self, request):
-        print(StudentMore.objects.get(user=request.user))
         self.queryset = Practice.objects.filter(
             ed_organization=StudentMore.objects.get(user=request.user).ed_organization)
         return super().list(request)
@@ -96,7 +74,6 @@ class StartPracticeRequestView(generics.ListAPIView):
         for c in request.data['emp_competence']:
 
             for elem in u.ed_competence.all():
-                print(elem)
                 for elem1 in elem.emp_competence.all():
 
                     s = EmpCompetence.objects.get(pk=c['pk'])
@@ -131,8 +108,6 @@ class ListAvailableInternshipView(generics.ListAPIView):
                                          key=internships_rate.get)
         for w in sorted_internships_keys:
             sorted_internships[w] = internships_rate[w]
-
-        print(sorted_internships)
 
         serializer = InternshipSerializer(sorted_internships.keys(), context={'request': request}, many=True)
         return Response(serializer.data)
@@ -388,16 +363,52 @@ class ListInternshipView(generics.ListAPIView):
     serializer_class = InternshipSerializer
     permission_classes = [permissions.IsAuthenticated, IsEmployer]
 
-    def get(self, request):
-        print(self.queryset)
-        return super().list(request)
-
 
 class ListPracticeView(generics.ListAPIView):
     queryset = Practice.objects.all()
     serializer_class = PracticeSerializer
     permission_classes = [permissions.IsAuthenticated, IsEdWorker]
 
-    def get(self, request):
-        print(self.queryset)
-        return super().list(request)
+
+class AddSkillView(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsStudent]
+
+    def post(self, request):
+        queryset = []
+        for skillset in request.data['skillset']:
+            s = Skill.objects.create(user=request.user, text=skillset['text'])
+            queryset.append(s)
+        serializer = SkillSerializer(s, context={'request': request})
+        return Response(serializer.data)
+
+
+class CreateReviewOnInternshipView(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsStudent]
+
+    def post(self, request, pk):
+        g = Internship.objects.get(pk=pk)
+        ReviewOnStudent.objects.create(
+            name=request.data['name'],
+            review_text=request.data['review_text'],
+            rate=request.data['rate'],
+            student=StudentM.objects.get(user=StudentMore.objects.get(user=request.user)),
+            goal=g
+        )
+        serializer = InternshipSerializer(g, context={'request': request})
+        return Response(serializer.data)
+
+
+class CreateReviewOnStudentView(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsEmployer]
+
+    def post(self, request, pk):
+        g = StudentM.objects.get(pk=pk)
+        ReviewOnStudent.objects.create(
+            name=request.data['name'],
+            review_text=request.data['review_text'],
+            rate=request.data['rate'],
+            employer=EmployerM.objects.get(user=EmployerMore.objects.get(user=request.user)),
+            student_for_review=g
+        )
+        serializer = StudentM(g, context={'request': request})
+        return Response(serializer.data)

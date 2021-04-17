@@ -40,6 +40,11 @@ urlpatterns = [
     path('listallpractice/', ListPracticeView.as_view()),
     path('listallinternship/', ListInternshipView.as_view()),
 
+    path('addskill/', AddSkillView.as_view()),
+
+    path('oninternshipreview/<int:pk>/', CreateReviewOnInternshipView.as_view()),
+    path('onstudentreview/<int:pk>/', CreateReviewOnStudentView.as_view()),
+
     # path('practice/list/', ListPracticeView.as_view()),
 
 ]
