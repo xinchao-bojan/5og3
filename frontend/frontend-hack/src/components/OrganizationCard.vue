@@ -1,7 +1,7 @@
 <template>
     <v-col>
         <v-row>
-            <v-col cols="12">
+            <v-col cols="12" class="all_card">
                 <v-card outlined class="card">
                     <v-row>
                         <v-col cols="8">
@@ -31,7 +31,7 @@
             
         </v-row>
         <v-row>
-           <v-col cols="12">
+           <v-col cols="12" class="all_card">
                 <v-card outlined class="card">
                     <v-row>
                         <v-col cols="8">
@@ -60,7 +60,7 @@
             </v-col>
         </v-row>
         <v-row>
-           <v-col cols="12">
+           <v-col cols="12" class="all_card">
                 <v-card outlined class="card">
                     <v-row>
                         <v-col cols="8">
@@ -89,7 +89,7 @@
             </v-col>
         </v-row>
         <v-row>
-           <v-col cols="12">
+           <v-col cols="12" class="all_card">
                 <v-card outlined class="card">
                     <v-row>
                         <v-col cols="8">
@@ -131,6 +131,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.all_card{
+    padding: 0;
+    margin-bottom: 4%;
+}
 
 .card{
     border: 1px solid #000000;

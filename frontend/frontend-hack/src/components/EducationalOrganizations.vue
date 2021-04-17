@@ -2,12 +2,12 @@
     <div class="container">
         <v-col>
             <v-row>
-                <v-col cols="5" class="title">
-                    <h2 >Поиск студентов</h2>
+                <v-col cols="7" class="title">
+                    <h2 >Образовательные организации</h2>
                 </v-col>
             </v-row>
             <v-row>
-                <v-col cols="5">
+                <v-col cols="8">
                     <v-text-field
                         v-model="message4"
                         label="Поиск"
@@ -15,7 +15,7 @@
                         class="text_field"                        
                     ></v-text-field>
                 </v-col>
-                <v-col cols="2">
+                <v-col cols="2" class="btn_cont">
                     <v-btn
                     outlined
                     rounded
@@ -23,47 +23,45 @@
                     class="btn">
                     Найти
                     </v-btn>                         
-                </v-col>                        
-                 
+                </v-col>
                 <v-col cols="2">
-                    
-                </v-col> 
-                <v-spacer></v-spacer>               
+                </v-col>
             </v-row>
             <v-row>
-                <StudentCard />
+                <v-col cols="12">
+                    <OrganizationCard />
+                </v-col>                
             </v-row>
-        </v-col>
-        <div>
+            <div>
             <v-pagination
             v-model="page"
             :length="6"
             ></v-pagination>
         </div>
-    </div>    
+        </v-col>
+    </div>
+    
 </template>
 
 <script>
-import StudentCard from './StudentCard.vue'
+import OrganizationCard from './OrganizationCard.vue'
 export default {
-  name: 'StudentSearchPage',
+  name: 'EmployersList',
   components: {
-    StudentCard
+    OrganizationCard
   },
   data () {
     return {
         page: 1,
     }
   }
-    
 }
 </script>
 
 <style lang="scss" scoped>
-
 .container{
-  margin: 0 auto;
-  max-width: 970px;
+    margin: 0 auto;
+    width: 1170px;
 }
 
 .title{
@@ -85,4 +83,5 @@ export default {
     background-color: #1319AD;
     width: 100%;
 }
+
 </style>

@@ -1,6 +1,10 @@
 import Home from '../components/Home.vue'
 import EmployersList from '../components/EmployersList.vue'
 import StudentSearchPage from '../components/StudentSearchPage.vue'
+import ChangeStudentCard from '../components/ChangeStudentCard.vue'
+import ChangeEmployerCard from '../components/ChangeEmployerCard.vue'
+import EducationalOrganizations from '../components/EducationalOrganizations.vue'
+import InternshipCreation from '../components/InternshipCreation.vue'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
@@ -19,6 +23,26 @@ const routes = [
     path: '/StudentSearchPage',
     name: 'StudentSearchPage',
     component: StudentSearchPage
+  },
+  {
+    path: '/ChangeStudentCard',
+    name: 'ChangeStudentCard',
+    component: ChangeStudentCard
+  },
+  {
+    path: '/ChangeEmployerCard',
+    name: 'ChangeEmployerCard',
+    component: ChangeEmployerCard
+  },
+  {
+    path: '/EducationalOrganizations',
+    name: 'EducationalOrganizations',
+    component: EducationalOrganizations
+  },
+  {
+    path: '/InternshipCreation',
+    name: 'InternshipCreation',
+    component: InternshipCreation
   }
 ]
 

@@ -69,6 +69,7 @@
         <v-spacer></v-spacer>
         <v-col cols="1" >
           <v-layout justify-end>
+            <router-link to="/EducationalOrganizations" class="link">
             <v-icon
             color="#000"
               large
@@ -76,6 +77,7 @@
             >
               mdi-arrow-right
             </v-icon>
+            </router-link>
             </v-layout>
         </v-col>     
       </v-row>

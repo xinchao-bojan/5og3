@@ -77,7 +77,7 @@
         <v-col>
           <v-row>
             <v-col cols="3" class="copyright"> 
-                <p class="footer_text">Copyright © BoostUP , 2021</p>
+                <p class="footer_text">Copyright © BustUP , 2021</p>
               <v-layout justify-end>
                 <div class="span"></div>
               </v-layout>

@@ -22,7 +22,9 @@
                   </v-layout>
                 </v-col>
                 <v-col cols="3">
-                  <p class="app_text">Образовательные организации</p>
+                  <router-link to="/EducationalOrganizations" class="app_text">
+                    <p class="app_text">Образовательные организации</p>
+                  </router-link>
                 </v-col>
                 <v-spacer>
 

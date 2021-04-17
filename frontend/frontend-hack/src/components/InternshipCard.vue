@@ -31,6 +31,12 @@
                                     <h3 class="card_title2">Требуемые навыки</h3> 
                                 </v-col>                                                
                             </v-row>
+                            <v-row>
+                                <p class="skill">Java</p>
+                                <p class="skill">Разработка приложений VR</p>
+                                <p class="skill">C#</p>
+                                <p class="skill">Машинное обучение</p>
+                            </v-row>
                         </v-col>
                         <v-col cols="4">
                             <v-row class="colp">
@@ -131,5 +137,19 @@ export default {
     font-weight: bold;
     font-size: 18px;
     line-height: 22px;
+}
+
+.skill{
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    background: #E8E8F7;
+    border: 1px solid #000000;
+    box-sizing: border-box;
+    border-radius: 50px;
+    padding: 8px;
+    margin-right: 5px;
 }
 </style>
