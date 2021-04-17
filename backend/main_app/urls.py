@@ -30,6 +30,16 @@ urlpatterns = [
     path('organizationlist/', OrganizationListView.as_view()),
     path('acceptinternship/', AcceptInternship.as_view()),
 
+    path('createpractice/', CreatePracticeView.as_view()),
+    path('endpractice/', EndPracticeView.as_view()),
+    path('applypractice/', ApplyForPracticeView.as_view()),
+
+    path('detailpractice/<int:pk>/', DetailPracticeStudentView.as_view()),
+    path('detailinternship/<int:pk>/', DetailInternshipStudentView.as_view()),
+
+    path('listallpractice/', ListPracticeView.as_view()),
+    path('listallinternship/', ListInternshipView.as_view()),
+
     # path('practice/list/', ListPracticeView.as_view()),
 
 ]

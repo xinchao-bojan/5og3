@@ -36,6 +36,12 @@ class Practice(models.Model):
         return self.name
 
 
+class PracticeApplication(models.Model):
+    practice = models.ForeignKey('Practice', on_delete=models.CASCADE)
+    student = models.ForeignKey('StudentM', on_delete=models.CASCADE)
+    accepted = models.BooleanField(default=False)
+
+
 class Skills(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название навыка')
 
