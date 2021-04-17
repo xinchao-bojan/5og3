@@ -9,6 +9,8 @@ from .serializers import *
 from custom_user.permissions import *
 from custom_user.serializers import *
 
+from ..custom_user.permissions import IsStudent, IsEdWorker
+
 
 class ListPracticeView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated, IsStudent or IsEdWorker]

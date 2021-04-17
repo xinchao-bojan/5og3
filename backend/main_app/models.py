@@ -100,13 +100,15 @@ REVIEW
 class ReviewOnStudent(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название отзыва')
     review_text = models.TextField(verbose_name='Отзыв')
-    employer = models.ForeignKey('Worker', verbose_name='Работодатель')
-    student_for_review = models.ForeignKey('StudentM', verbose_name='Отзыв на студента')
+    rate = models.IntegerField(max_length=5, verbose_name='Оценка')
+    employer = models.ForeignKey('Worker', verbose_name='Работодатель', on_delete=models.CASCADE)
+    student_for_review = models.ForeignKey('StudentM', verbose_name='Отзыв на студента', on_delete=models.CASCADE)
 
 
 class ReviewOnEmployer(models.Model):
     name = models.CharField(max_length=255, verbose_name='Заголовок отзыва')
     review_text = models.TextField(verbose_name='Отзыв')
-    student = models.ForeignKey('StudentM', verbose_name='Студент')
-    employer_for_review = models.ForeignKey('EmpCompany', verbose_name='Отзыв о работодателе')
+    rate = models.IntegerField(max_length=5,verbose_name='Оценка')
+    student = models.ForeignKey('StudentM', verbose_name='Студент', on_delete=models.CASCADE)
+    employer_for_review = models.ForeignKey('EmpCompany', verbose_name='Отзыв о работодателе', on_delete=models.CASCADE)
 
