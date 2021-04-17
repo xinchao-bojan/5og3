@@ -8,11 +8,13 @@ class EdOrganizationSerializer(serializers.ModelSerializer):
         model = EdOrganization
         fields = '__all__'
 
+
 class EmpCompanySerializer(serializers.ModelSerializer):
     class Meta:
         depth = 1
         model = EmpCompany
         fields = '__all__'
+
 
 class EmpCompetenceSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,11 +22,13 @@ class EmpCompetenceSerializer(serializers.ModelSerializer):
         model = EmpCompetence
         fields = '__all__'
 
+
 class EdCompetenceSerializer(serializers.ModelSerializer):
     class Meta:
         depth = 1
         model = EdCompetence
         fields = '__all__'
+
 
 class InternshipSerializer(serializers.ModelSerializer):
     class Meta:
@@ -32,11 +36,13 @@ class InternshipSerializer(serializers.ModelSerializer):
         model = Internship
         fields = '__all__'
 
+
 class PracticeSerializer(serializers.ModelSerializer):
     class Meta:
         depth = 1
         model = Practice
         fields = '__all__'
+
 
 class SkillsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -45,3 +51,8 @@ class SkillsSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ApprovalPracticeSerializer(serializers.ModelSerializer):
+    class Meta:
+        depth = 1
+        model = ApprovalPractice
+        fields = '__all__'

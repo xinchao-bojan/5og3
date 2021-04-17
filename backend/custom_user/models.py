@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.utils.translation import gettext_lazy as _
 
-from main_app.models import EdOrganization
 
 
 class CustomUserManager(BaseUserManager):
@@ -46,7 +45,6 @@ class CustomUser(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
-    user = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name', ]
@@ -83,7 +81,6 @@ class StudentMore(models.Model):
     )
     sex = models.IntegerField(choices=SEX_CHOICER)
     date_of_birth = models.DateField(blank=True, null=True)
-    ed_organization = models.ForeignKey(EdOrganization, on_delete=models.CASCADE)
 
 
 class StudentManager(models.Manager):
@@ -134,7 +131,6 @@ class Admin(CustomUser):
 
 class EmployerMore(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    ed_organization = models.ForeignKey(EdOrganization, on_delete=models.CASCADE)
 
 
 class EmployerManager(models.Manager):
@@ -182,4 +178,3 @@ class EdWorker(CustomUser):
         if not self.pk:
             self.type = CustomUser.Type.EDWORKER
         return super().save(*args, **kwargs)
-

@@ -78,5 +78,12 @@ class AddStudentMoreView(APIView):
             return Response('ValidationError', status=status.HTTP_400_BAD_REQUEST)
         except KeyError:
             return Response('Key Error', status=status.HTTP_400_BAD_REQUEST)
+
         serializer = StudentSerializer(request.user, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class KEK(APIView):
+    def get(self, request):
+        serializer = pretty_serializer(request)
         return Response(serializer.data, status=status.HTTP_200_OK)
