@@ -2,22 +2,6 @@ from rest_framework import serializers
 from .models import *
 from ..custom_user.models import StudentMore, CustomUser
 
-class StudentMSerializer(object):
-    pass
-
-
-class PracticeSerializer(object):
-    pass
-
-
-class EdCompetenceSerializer(object):
-    pass
-
-
-class InternshipSerializer(object):
-    pass
-
-
 class CustomUserOnlyNameSerializer(serializers.ModelSerializer):
     class Meta:
         depth = 1
