@@ -27,7 +27,8 @@
                 </v-spacer>
                 <v-col cols="11-12" justify-end>
                   <v-layout justify-end>
-                    <router-link to="/login" class="app_text">Профиль</router-link>
+                    <router-link to="/registration" class="app_text">Зарегистрироваться</router-link>
+                    <router-link to="/login" class="app_text">Войти</router-link>
                   </v-layout>
                   
                 </v-col>          

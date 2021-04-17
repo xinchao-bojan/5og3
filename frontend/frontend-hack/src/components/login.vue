@@ -5,10 +5,10 @@
             <button class="btn-login">Я студент</button>
             <button class="btn-login not-active" v-on:click="isActiveBtn = false">Я работодатель</button>
         </div>
-        <form action="">
-            <input class="default-input" type="text" placeholder="Адрес эл. почты или телефон">
-            <input class="default-input" type="text" placeholder="Пароль">
-            <button class="btn-submit">Войти</button>
+        <form>
+            <input v-model="email" class="default-input" type="email" placeholder="Адрес эл. почты" required>
+            <input v-model="password" class="default-input" type="password" placeholder="Пароль" required>
+            <button class="btn-submit" type="submit" @click="sendStudent">Войти</button>
         </form>
     </div>
     <div class="auth-block__reg" v-else>
@@ -16,27 +16,34 @@
             <button class="btn-login not-active" v-on:click="isActiveBtn = true">Я студент</button>
             <button class="btn-login">Я работодатель</button>
         </div>
-        <form action="">
-            <input class="default-input" type="text" placeholder="Адрес эл. почты или телефон">
-            <input class="default-input" type="text" placeholder="Пароль">
-            <button class="btn-submit">Войти</button>
+        <form>
+            <input v-model="email" class="default-input" type="email" placeholder="Адрес эл. почты" required>
+            <input v-model="password" class="default-input" type="password" placeholder="Пароль" required>
+            <button class="btn-submit" type="submit" @click="sendEmployer">Войти</button>
         </form>
     </div>
   </div>
 </template>
 
 <script>
+
 export default {
   setup() {},
   data() {
     return {
       isActiveBtn: true,
+      email: "",
+      password: ""
     };
   },
   methods: {
-    changeActiveBtn() {
-      console.log("button", this.isActiveBtn);
+    sendStudent(e){
+        e.preventDefault()
+        console.log("send Student", this.email);
     },
+    sendEmployer(){
+        console.log("send Employer", this.email);
+    }
   },
 };
 </script>
