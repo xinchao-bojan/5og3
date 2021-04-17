@@ -138,6 +138,7 @@ EMP
 
 class EmpCompetence(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название компетенции', unique=True)
+    ed_competence = models.ManyToManyField('EdCompetence', blank=True)
 
     def __str__(self):
         return self.name
