@@ -18,14 +18,14 @@
               <p class="app_text">Образовательные организации</p>
             </v-col>
             <v-spacer> </v-spacer>
-            <v-col cols="2" justify-end>
+            <v-col cols="2" justify-end v-if="!isLoggedIn">
               <v-layout justify-end>
                 <router-link to="/registration" class="app_text">
                   <p class="app_text">Зарегистрироваться</p>
                 </router-link>
               </v-layout>
             </v-col>
-            <v-col cols="1" class="vhod">
+            <v-col cols="1" class="vhod" v-if="!isLoggedIn">
               <div class="span"></div>
               <v-layout justify-end>
                 <router-link to="/login" class="app_text">
@@ -33,11 +33,21 @@
                 </router-link>
               </v-layout>
             </v-col>
-            <v-col cols="1" class="vhod">
-              <div class="span"></div>
+            <v-col cols="1" class="vhod" v-if="isLoggedIn">
               <v-layout justify-end>
                 <router-link to="/profile" class="app_text">
-                  <p class="app_text">Профиль</p>
+                  <p class="app_text">
+                    <img src="@/assets/icon_acc.svg" alt="" />
+                  </p>
+                </router-link>
+              </v-layout>
+            </v-col>
+            <v-col cols="1" class="vhod" v-if="isLoggedIn">
+              <v-layout justify-end>
+                <router-link to="/">
+                  <a class="nav-link" @click="logout">
+                    <img src="@/assets/icon_logout.svg" alt="">
+                  </a>
                 </router-link>
               </v-layout>
             </v-col>
@@ -51,6 +61,28 @@
 <script>
 export default {
   setup() {},
+  computed: {
+    isLoggedIn: function () {
+      console.log("Hello from computed isLoggedIn");
+      console.log(
+        "Значение isAuthenticated",
+        this.$store.getters.isAuthenticated
+      );
+      return this.$store.getters.isAuthenticated;
+    },
+  },
+  methods: {
+    logout: function () {
+      console.log("jopasdjasi");
+      this.$store.dispatch("LOGOUT").then(() => {
+        console.log("Вы вышли из системы");
+        this.$router.push("/Authorization").catch(() => {});
+      });
+    },
+    jopa: function () {
+      console.log("LOGOUT AAAA");
+    },
+  },
 };
 </script>
 

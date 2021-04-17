@@ -72,20 +72,19 @@ export default {
     sendStudent(e) {
       e.preventDefault();
       axios
-        .post("https://dafbb6132c6f.ngrok.io/", {
+        .post("https://dafbb6132c6f.ngrok.io/api/auth/jwt/create/", {
           email: this.email,
           password: this.password,
         })
         .then((response) => {
-
-          let token = response.data.accessToken;
+          let token = response.data.access;
           axios.defaults.headers.authorization = "Bearer " + token;
-          console.log(this);
+          console.log(response.data.access);
           this.$router.push("/");
           if (response.status === 200) {
+            localStorage.setItem('token', token)
             console.log(response.config.data, response);
-            localStorage.setItem("token", token);
-            console.log("localStorage after set: ", localStorage);
+            console.log("localStorage after set: ", localStorage)
           }
         });
       console.log("send Student", this.email);

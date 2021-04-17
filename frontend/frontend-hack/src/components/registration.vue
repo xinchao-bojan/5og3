@@ -215,7 +215,7 @@ export default {
                   data: {
                     sex: this.sex,
                     date: this.dateborn,
-                    ed_organization: this.organization,
+                    ed_organization: this.institut,
                   },
                 })
                 .then((response) => {

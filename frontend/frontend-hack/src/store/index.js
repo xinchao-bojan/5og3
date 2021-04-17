@@ -5,7 +5,8 @@ Vue.use(Vuex)
 import axios from 'axios'
 export default new Vuex.Store({
   state: {
-    employers: []
+    employers: [],
+    token: localStorage.getItem('token') || '',
   },
   mutations: {
     SET_EMPLOYERS_TO_STATE: (state, employers) => {
@@ -13,6 +14,10 @@ export default new Vuex.Store({
       state.employers = employers
       console.log("steate", state.employers);
     },
+    LOGOUT(state) {
+      console.log("Hello from store.js LOGOUT")
+      state.token = ''
+  },
   },
   actions: {
     GET_EMPLOYERS_FROM_API({ commit }) {
@@ -35,11 +40,22 @@ export default new Vuex.Store({
           return error;
         })
     },
+    LOGOUT({ commit }) {
+      return new Promise((resolve) => {
+        commit('LOGOUT')
+        console.log("hello from logout")
+        console.log(localStorage)
+        localStorage.removeItem('token')
+        delete axios.defaults.headers.authorization
+        resolve()
+      })
+    },
   },
   getters: {
     ARTICLES(state) {
       return state.articles;
     },
+    isAuthenticated: state => !!state.token,
   },
   modules: {
   }
