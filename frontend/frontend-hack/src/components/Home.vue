@@ -1,8 +1,8 @@
 <template>
   <v-col>
     <v-row class="bg_color">
-      <v-col cols="6">
-        <div class="container">
+      <div class="container">
+        
           <v-col cols="6">
             <v-row>
               <h1 class="title1">Добро пожаловать в сервис для поиска стажировок</h1>
@@ -33,8 +33,7 @@
             </v-row>
           </v-col>
           
-        </div>
-      </v-col>
+      </div>
       <v-col cols="6">
         <img src="./pic.png" class="photo">
       </v-col> 
@@ -80,25 +79,49 @@
       <v-row>
         <OrganizationCard />
       </v-row>
+      <v-row class="section2">
+        <v-col cols="6">
+          <h2 class="title2">Рекомендуемые стажировки</h2>
+        </v-col> 
+        <v-spacer></v-spacer>
+        <v-col cols="1" >
+          <v-layout justify-end>
+            <v-icon
+            color="#000"
+              large
+              @click="next"
+            >
+              mdi-arrow-right
+            </v-icon>
+            </v-layout>
+        </v-col>     
+      </v-row>
+      <v-row>
+        <v-col>
+          <InternshipCard />
+        </v-col>
+      </v-row>
     </div>
   </v-col>
 </template>
 
 <script>
 import EmployerCard from './EmployerCard'
+import InternshipCard from './InternshipCard.vue'
 import OrganizationCard from './OrganizationCard'
 
 export default {
   name: 'Home',
   components: {
     EmployerCard,
-    OrganizationCard
+    OrganizationCard,
+    InternshipCard
   },
   methods: {
-      next () {
+    next () {
         
-      },
     },
+  },
 }
 </script>
 
@@ -136,6 +159,7 @@ export default {
   color: #fff;
   &:hover{
     background: linear-gradient(to right, #9d1737 0%, #bf1a42 100%);
+    border:none;
   }
   &:focus{
     background: #9D1737;

@@ -17,9 +17,7 @@
                 <v-col cols="3">
                   <v-layout justify-center>                  
                   <router-link to="/EmployersList" class="app_text">
-                    
-                      Рейтинг работодателей
-                    
+                      Рейтинг работодателей                    
                   </router-link>
                   </v-layout>
                 </v-col>
