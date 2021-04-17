@@ -3,7 +3,6 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.utils.translation import gettext_lazy as _
 
 
-
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **kwargs):
         if not email:
@@ -82,6 +81,9 @@ class StudentMore(models.Model):
     sex = models.IntegerField(choices=SEX_CHOICER)
     date_of_birth = models.DateField(blank=True, null=True)
 
+    def __str__(self):
+        return self.user
+
 
 class StudentManager(models.Manager):
     def get_queryset(self, *args, **kwargs):
@@ -106,6 +108,9 @@ class Student(CustomUser):
 
 class AdminMore(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user
 
 
 class AdminManager(models.Manager):
@@ -132,6 +137,9 @@ class Admin(CustomUser):
 class EmployerMore(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.user
+
 
 class EmployerManager(models.Manager):
 
@@ -157,6 +165,9 @@ class Employer(CustomUser):
 
 class EdWorkerMore(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user
 
 
 class EdWorkerManager(models.Manager):

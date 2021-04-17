@@ -32,13 +32,22 @@ class AddStudentMoreView(APIView):
             return Response('already exist', status=status.HTTP_202_ACCEPTED)
         except StudentMore.DoesNotExist:
             try:
+                d = {
+                    'F': StudentMore.FEMALE,
+                    'M': StudentMore.MALE
+                }
                 request.user.type = CustomUser.Type.STUDENT
                 request.user.save()
                 more = StudentMore.objects.create(
                     user=request.user,
-                    sex=request.data['sex'],
+                    sex=d[request.data['sex']],
                     date_of_birth=request.data['date']
                 )
+                print(request.data['ed_organization'])
+                print(request.data)
+                print(EdOrganization.objects.get(name='МИРЭА'))
+                print(EdOrganization.objects.get(
+                    name=request.data['ed_organization']))
                 StudentM.objects.create(user=more,
                                         ed_organization=EdOrganization.objects.get(
                                             name=request.data['ed_organization']))
@@ -93,21 +102,25 @@ class ListAvailableInternshipView(generics.ListAPIView):
         s = StudentM.objects.get(user=StudentMore.objects.get(user=request.user))
 
         internships_rate = dict.fromkeys(Internship.objects.all(), 0)
-        print(internships_rate)
-        return Response('kek')
-        # a = 0
-        # for internship in Internship.objects.all():
-        #     for input_competence in internship.input_competences:
-        #         if input_competence in :
-        #             internships_rate[a] += 1
-        #     a += 1
-        #
-        # for i in range(len(internships_rate) - 1):
-        #     for j in range(len(internships_rate) - 1 - i):
-        #         if internships_rate[j] > internships_rate[j + 1]:
-        #             internships_rate[j], internships_rate[j + 1] = internships_rate[j + 1], internships_rate[j]
-        #             internships[j], internships[j + 1] = internships[j + 1], internships[j]
-        # return internships
+
+        internships_list = internships_rate.keys()
+
+        sorted_internships = {}
+
+        for internship in internships_list:
+            for input_competence in internship.input_emp_competence.all():
+                if input_competence in s.emp_competence.all():
+                    internships_rate[internship] += 1
+
+        sorted_internships_keys = sorted(internships_rate,
+                                         key=internships_rate.get)
+        for w in sorted_internships_keys:
+            sorted_internships[w] = internships_rate[w]
+
+        print(sorted_internships)
+
+        serializer = InternshipSerializer(sorted_internships.keys(), context={'request': request}, many=True)
+        return Response(serializer.data)
 
 
 class CreateCompanyView(APIView):
@@ -125,6 +138,51 @@ class CreateCompanyView(APIView):
             em = EmployerM.objects.create(user=m, emp_company=e)
             serializer = EmployerMSerializer(em, context={'request': request})
             return Response(serializer.data)
+
+
+class AddEmployerView(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsEmployer]
+
+    def post(self, request):
+        u = CustomUser.objects.get(pk=request.data['candidate'])
+        u.type = CustomUser.Type.EMPLOYER
+        u.save()
+        c = EmployerM.objects.get(user=EmployerMore.objects.get(user=request.user)).emp_company
+        m = EmployerMore.objects.create(user=u)
+        em = EmployerM.objects.create(user=m, emp_company=c)
+        serializer = EmployerMSerializer(em, context={'request': request})
+        return Response(serializer.data)
+
+
+class CreateOrganizationView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        try:
+            EdWorkerM.objects.get(user=request.user)
+            return Response('already exist', status=status.HTTP_202_ACCEPTED)
+        except EmployerMore.DoesNotExist:
+            request.user.type = CustomUser.Type.EMPLOYER
+            request.user.save()
+            e = EdOrganization.objects.create(name=request.data['name'])
+            m = EdWorkerMore.objects.create(user=request.user)
+            em = EdWorkerM.objects.create(user=m, emp_company=e)
+            serializer = EdWorkerMSerializer(em, context={'request': request})
+            return Response(serializer.data)
+
+
+class AddWorkerView(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsEdWorker]
+
+    def post(self, request):
+        u = CustomUser.objects.get(pk=request.data['candidate'])
+        u.type = CustomUser.Type.EDWORKER
+        u.save()
+        c = EdWorkerM.objects.get(user=EdWorkerMore.objects.get(user=request.user)).ed_organization
+        m = EdWorkerMore.objects.create(user=u)
+        em = EdWorkerM.objects.create(user=m, emp_company=c)
+        serializer = EdWorkerMSerializer(em, context={'request': request})
+        return Response(serializer.data)
 
 
 class CreateInternshipView(APIView):
@@ -145,42 +203,66 @@ class CreateInternshipView(APIView):
         return Response(serializer.data)
 
 
-class ApplyForInternship(APIView):
+class EndInternshipView(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsEmployer, IsOwner]
+
+    def post(self, request):
+        e = EmployerM.objects.get(user=EmployerMore.objects.get(user=request.user))
+        c = e.emp_company
+        i = c.internship_set.get(pk=request.data['internship'])
+        for u in request.data['students']:
+            s = i.internshipapplication_set.get(pk=u['pk']).student
+            s.emp_competence.add(i.input_emp_competence.all())
+            s.emp_competence.add(i.output_emp_competence.all())
+        return Response(status == status.HTTP_200_OK)
+
+
+class ApplyForInternshipView(APIView):
     permission_classes = [permissions.IsAuthenticated, IsStudent]
 
     def put(self, request, pk):
         i = Internship.objects.get(pk=pk)
         s = StudentM.objects.get(user=StudentMore.objects.get(user=request.user))
-        i.students.add(s)
-        return Response(status=status.HTTP_200_OK)
+        e = None
+        if 'ed_organization' in request.data:
+            e = EdOrganization.objects.get(pk=request.data['ed_organization'])
+
+        i = InternshipApplication.objects.create(
+            ed_organization=e,
+            internship=i,
+            student=s
+        )
+        serializer = InternshipApplicationSerializer(i, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class lol(APIView):
-    def get(self, request):
-        d = [
-            {
-                'id': 1,
-                'first_name': 'Ivan',
-                'last_name': 'Malov',
-                'date': '06-16-2001',
-                'sex': 1,
-                'email': 'sosu@xyu.ru',
-                'organization': {
-                    'name': 'SAS',
-                    'description': 'sasi xyu'
-                }
-            },
-            {
-                'id': 2,
-                'first_name': 'MAx',
-                'last_name': 'Garshin',
-                'date': '06-16-2001',
-                'sex': 1,
-                'email': 'sosu@xyu.ru',
-                'organization': {
-                    'name': 'SAS',
-                    'description': 'sasi xyu'
-                }
-            }
-        ]
-        return Response(d)
+class InviteForInternshipView(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsEmployer]
+
+    def put(self, request, pk):
+        i = Internship.objects.get(pk=pk)
+        s = StudentM.objects.get(pk=request.data['student'])
+
+        i = InternshipApplication.objects.create(
+            internship=i,
+            student=s
+        )
+        serializer = InternshipApplicationSerializer(i, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class AdviceForInternshipView(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsEdWorker]
+
+    def put(self, request, pk):
+        i = Internship.objects.get(pk=pk)
+        e = EdWorkerM.objects.get(user=EdWorkerMore.objects.get(user=request.user))
+        s = StudentM.objects.get(pk=request.data['student'])
+
+        i = InternshipApplication.objects.create(
+            internship=i,
+            student=s,
+            ed_organization=e.ed_organization
+        )
+        serializer = InternshipApplicationSerializer(i, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)

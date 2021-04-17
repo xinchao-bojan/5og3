@@ -58,8 +58,22 @@ class StudentMSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class EdWorkerMSerializer(serializers.ModelSerializer):
+    class Meta:
+        depth = 1
+        model = StudentM
+        fields = '__all__'
+
+
 class EmployerMSerializer(serializers.ModelSerializer):
     class Meta:
         depth = 1
         model = EmployerM
+        fields = '__all__'
+
+
+class InternshipApplicationSerializer(serializers.ModelSerializer):
+    class Meta:
+        depth = 1
+        model = InternshipApplication
         fields = '__all__'
