@@ -140,6 +140,7 @@ class AddEmployerView(APIView):
         c = EmployerM.objects.get(user=EmployerMore.objects.get(user=request.user)).emp_company
         m = EmployerMore.objects.create(user=u)
         em = EmployerM.objects.create(user=m, emp_company=c)
+
         serializer = EmployerMSerializer(em, context={'request': request})
         return Response(serializer.data)
 
@@ -149,14 +150,15 @@ class CreateOrganizationView(APIView):
 
     def post(self, request):
         try:
-            EdWorkerM.objects.get(user=request.user)
+            EdWorkerM.objects.get(user=EdWorkerMore.objects.get(user=request.user))
             return Response('already exist', status=status.HTTP_202_ACCEPTED)
-        except EmployerMore.DoesNotExist:
+        except EdWorkerM.DoesNotExist:
+
             request.user.type = CustomUser.Type.EMPLOYER
             request.user.save()
             e = EdOrganization.objects.create(name=request.data['name'])
             m = EdWorkerMore.objects.create(user=request.user)
-            em = EdWorkerM.objects.create(user=m, emp_company=e)
+            em = EdWorkerM.objects.create(user=m, ed_organization=e)
             serializer = EdWorkerMSerializer(em, context={'request': request})
             return Response(serializer.data)
 

@@ -23,6 +23,7 @@ class Internship(models.Model):
             self.rate = 10
         if self.rate < 0:
             self.rate = 0
+        self.emp_company.save()
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -105,6 +106,7 @@ class StudentM(models.Model):
             self.rate = 10
         if self.rate < 0:
             self.rate = 0
+
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -141,6 +143,18 @@ class EmpCompetence(models.Model):
 
 class EmpCompany(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название организации-работодателя')
+    rate = models.DecimalField(default=0, decimal_places=2, max_digits=4, verbose_name='Оценка')
+
+    def save(self, *args, **kwargs):
+        temp = 0
+        for c in self.internship_set.all():
+            temp += c.rate
+        self.rate = temp / self.internship_set.count()
+        if self.rate > 10:
+            self.rate = 10
+        if self.rate < 0:
+            self.rate = 0
+        super.save(*args, **kwargs)
 
     def __str__(self):
         return self.name

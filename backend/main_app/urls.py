@@ -11,7 +11,7 @@ urlpatterns = [
     path('startcompany/', CreateCompanyView.as_view()),
     path('hirecompany/', AddEmployerView.as_view()),
 
-    path('startorganization/', CreateOrganizationView.as_view()),
+    path('organization/create/', CreateOrganizationView.as_view()),#
     path('hireorganization/', AddWorkerView.as_view()),
 
     path('createinternship/', CreateInternshipView.as_view()),
