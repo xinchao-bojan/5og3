@@ -22,6 +22,14 @@ urlpatterns = [
 
     path('listinternship/', ListAvailableInternshipView.as_view()),
 
+    path('createcompetence/', CreateCompetenceView.as_view()),
+
+    path('createcompetence/', CreateCompetenceView.as_view()),
+
+    path('companylist/', CompanyListView.as_view()),
+    path('organizationlist/', OrganizationListView.as_view()),
+    path('acceptinternship/', AcceptInternship.as_view()),
+
     # path('practice/list/', ListPracticeView.as_view()),
 
 ]

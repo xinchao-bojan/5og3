@@ -58,28 +58,16 @@ class UpdateMyselfView(APIView):
         serializer = pretty_serializer(request)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-#
-# class AddStudentMoreView(APIView):
-#     permission_classes = [permissions.IsAuthenticated]
-#
-#     def put(self, request):
-#         if StudentMore.objects.get(user=request.user):
-#             return Response('already exist', status=status.HTTP_202_ACCEPTED)
-#         try:
-#             request.user.type = CustomUser.Type.STUDENT
-#             request.user.save()
-#             StudentMore.objects.create(
-#                 user=request.user,
-#                 sex=request.data['sex'],
-#                 date_of_birth=request.data['date'],
-#                 ed_organization=EdOrganization.objects.get(pk=request.data['ed_organization'])
-#             )
-#         except ValidationError:
-#             return Response('ValidationError', status=status.HTTP_400_BAD_REQUEST)
-#         except KeyError:
-#             return Response('Key Error', status=status.HTTP_400_BAD_REQUEST)
-#
-#         serializer = StudentSerializer(request.user, context={'request': request})
-#         return Response(serializer.data, status=status.HTTP_200_OK)
-#
 
+class CreateAdminView(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsAdmin]
+
+    def put(self, request):
+        c = CustomUser.objects.get(pk=request.data['user'])
+        if c.type == CustomUser.Type.ADMIN:
+            return Response('already admin')
+        c.type = CustomUser.Type.ADMIN
+        AdminMore.objects.create(user=c)
+        c.save()
+        serializer = AdminSerializer(c, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
