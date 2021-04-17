@@ -5,7 +5,11 @@
         <v-row>
           <v-col cols="6">
             <v-row>
-              <h1 class="title1">BustUP - первый в России сервис по поиску стажировок</h1>
+              <h1 class="title1">
+                BoostUP - первый в России сервис по поиску стажировок
+                {{ this.EMPLOYERS[0].description }}
+              </h1>
+              <!-- <h1>{{EMPLOYERS}}</h1> -->
             </v-row>
             <v-row>
               <p class="description">
@@ -103,7 +107,7 @@
 import EmployerCard from "./EmployerCard";
 import InternshipCard from "./InternshipCard.vue";
 import OrganizationCard from "./OrganizationCard";
-// import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "Home",
@@ -114,6 +118,30 @@ export default {
   },
   methods: {
     next() {},
+    ...mapActions(["GET_EMPLOYERS_FROM_API"]),
+  },
+  computed: {
+    ...mapGetters(["EMPLOYERS"]),
+  },
+  watch: {
+    EMPLOYERS() {
+      console.log(
+        "WATCHERSUKABLYADTHIS STORE STATE",
+        JSON.parse(JSON.stringify(this.$store.state.employers))[0].id,
+        this.EMPLOYERS[0].description
+      );
+    },
+  },
+  mounted() {
+    this.GET_EMPLOYERS_FROM_API();
+    console.log(
+      "THIS STORE STATE",
+      JSON.parse(JSON.stringify(this.$store.state.employers))[0]
+    );
+    console.log(
+      "AAAAAAAAAAAAAAAAAAAAAAAAAA",
+      JSON.parse(JSON.stringify(this.$store.state))
+    );
   },
 };
 </script>

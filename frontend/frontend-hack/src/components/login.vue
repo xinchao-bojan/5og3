@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios";
 export default {
   setup() {},
   data() {
@@ -72,19 +72,18 @@ export default {
     sendStudent(e) {
       e.preventDefault();
       axios
-        .post("https://dafbb6132c6f.ngrok.io/api/auth/jwt/create/", {
+        .post("https://d7709109e4f4.ngrok.io/api/auth/jwt/create/", {
           email: this.email,
           password: this.password,
         })
         .then((response) => {
           let token = response.data.access;
-          axios.defaults.headers.authorization = "Bearer " + token;
-          console.log(response.data.access);
+          console.log(response);
           this.$router.push("/");
           if (response.status === 200) {
-            localStorage.setItem('token', token)
+            localStorage.setItem("token", token);
             console.log(response.config.data, response);
-            console.log("localStorage after set: ", localStorage)
+            console.log("localStorage after set: ", localStorage);
           }
         });
       console.log("send Student", this.email);

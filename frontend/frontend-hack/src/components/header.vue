@@ -78,10 +78,7 @@ export default {
         console.log("Вы вышли из системы");
         this.$router.push("/Authorization").catch(() => {});
       });
-    },
-    jopa: function () {
-      console.log("LOGOUT AAAA");
-    },
+    }
   },
 };
 </script>
