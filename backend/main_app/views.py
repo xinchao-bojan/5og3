@@ -317,3 +317,76 @@ class AcceptInternship(APIView):
         i.accepted = True
         i.save()
         return Response(i.student.user.user.email)
+
+
+class CreatePracticeView(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsEdWorker]
+
+    def post(self, request):
+        m = EdWorkerMore.objects.get(user=request.user)
+        u = EdWorkerM.objects.get(user=m)
+        i = Practice.objects.create(
+            name=request.data['name'],
+            ed_organization=u.ed_organization,
+            description=request.data['description'])
+        for input in request.data['input']:
+            i.input_ed_competence.add(EdCompetence.objects.get(pk=input['pk']))
+        for output in request.data['output']:
+            i.output_ed_competence.add(EdCompetence.objects.get(pk=output['pk']))
+        serializer = InternshipSerializer(i, context={'request': request})
+        return Response(serializer.data)
+
+
+class EndPracticeView(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsEdWorker]
+
+    def post(self, request):
+        e = EdWorkerM.objects.get(user=EdWorkerMore.objects.get(user=request.user))
+        c = e.ed_organization
+        i = c.practice_set.get(pk=request.data['practice'])
+        for u in request.data['students']:
+            s = i.practiceapplication_set.get(pk=u['pk']).student
+            s.ed_competence.add(i.input_ed_competence.all())
+            s.ed_competence.add(i.output_ed_competence.all())
+        return Response(status == status.HTTP_200_OK)
+
+
+class ApplyForPracticeView(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsStudent]
+
+    def put(self, request, pk):
+        i = Practice.objects.get(pk=pk)
+        s = StudentM.objects.get(user=StudentMore.objects.get(user=request.user))
+
+        i = PracticeApplication.objects.create(
+            practice=i,
+            student=s
+        )
+        serializer = PracticeApplication(i, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class DetailPracticeStudentView(generics.RetrieveAPIView):
+    queryset = Practice.objects.all()
+    serializer_class = PracticeSerializer
+    permission_classes = [permissions.IsAuthenticated, IsEdWorker]
+
+
+class DetailInternshipStudentView(generics.RetrieveAPIView):
+    queryset = Internship.objects.all()
+    serializer_class = InternshipSerializer
+    permission_classes = [permissions.IsAuthenticated, IsEmployer]
+
+
+class ListInternshipView(generics.ListAPIView):
+    queryset = Internship.objects.all()
+    serializer_class = InternshipSerializer
+    permission_classes = [permissions.IsAuthenticated, IsEmployer]
+
+
+class ListPracticeView(generics.ListAPIView):
+    queryset = Practice.objects.all()
+    serializer_class = PracticeSerializer
+    permission_classes = [permissions.IsAuthenticated, IsEdWorker]
+
+
