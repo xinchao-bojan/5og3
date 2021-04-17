@@ -81,7 +81,7 @@ class StudentMSerializer(serializers.ModelSerializer):
     class Meta:
         depth = 1
         model = StudentM
-        fields = ['id', 'user__user__user__first_name', 'user__user__user__last_name', 'user__user__user__email', 'ed_organization', 'ed_competence', 'emp_competence', 'rate']
+        fields = ['id', 'user__user__first_name', 'user__user__last_name', 'user__user__email', 'ed_organization', 'ed_competence', 'emp_competence', 'rate']
 
         ed_organization = EdOrganizationSerializer()
         ed_competence = EdCompetenceSerializer()
@@ -92,7 +92,7 @@ class EdWorkerMSerializer(serializers.ModelSerializer):
     class Meta:
         depth = 1
         model = EdWorkerM
-        fields = ['id', 'user__user__user__first_name', 'user__user__user__last_name', 'user__user__user__email', 'ed_organization']
+        fields = ['id', 'user__user__first_name', 'user__user__last_name', 'user__user__email', 'ed_organization']
 
         ed_organization = EdOrganizationSerializer()
 
@@ -101,7 +101,7 @@ class EmployerMSerializer(serializers.ModelSerializer):
     class Meta:
         depth = 1
         model = EmployerM
-        fields = ['id', 'user__user__user__first_name', 'user__user__user__last_name', 'user__user__user__email', 'emp_company']
+        fields = ['id', 'user__user__first_name', 'user__user__last_name', 'user__user__email', 'emp_company']
 
         emp_company = EmpCompanySerializer()
 
