@@ -24,13 +24,11 @@ from custom_user.permissions import IsStudent, IsEdWorker
 class CompanyListView(generics.ListAPIView):
     queryset = EmpCompany
     serializer_class = EmpCompanySerializer
-    permission_classes = [permissions.IsAuthenticated]
 
 
 class OrganizationListView(generics.ListAPIView):
     queryset = EdOrganization
     serializer_class = EdOrganizationSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
 
 class AddStudentMoreView(APIView):
@@ -390,3 +388,45 @@ class ListPracticeView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated, IsEdWorker]
 
 
+class AddSkillView(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsStudent]
+
+    def post(self, request):
+        queryset = []
+        for skillset in request.data['skillset']:
+            s = Skill.objects.create(user=request.user, text=skillset['text'])
+            queryset.append(s)
+        serializer = SkillSerializer(s, context={'request': request})
+        return Response(serializer.data)
+
+
+class CreateReviewOnInternshipView(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsStudent]
+
+    def post(self, request, pk):
+        g = Internship.objects.get(pk=pk)
+        ReviewOnStudent.objects.create(
+            name=request.data['name'],
+            review_text=request.data['review_text'],
+            rate=request.data['rate'],
+            student=StudentM.objects.get(user=StudentMore.objects.get(user=request.user)),
+            goal=g
+        )
+        serializer = InternshipSerializer(g, context={'request': request})
+        return Response(serializer.data)
+
+
+class CreateReviewOnStudentView(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsEmployer]
+
+    def post(self, request, pk):
+        g = StudentM.objects.get(pk=pk)
+        ReviewOnStudent.objects.create(
+            name=request.data['name'],
+            review_text=request.data['review_text'],
+            rate=request.data['rate'],
+            employer=EmployerM.objects.get(user=EmployerMore.objects.get(user=request.user)),
+            student_for_review=g
+        )
+        serializer = StudentM(g, context={'request': request})
+        return Response(serializer.data)

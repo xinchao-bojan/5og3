@@ -44,10 +44,10 @@ class PracticeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class SkillsSerializer(serializers.ModelSerializer):
+class SkillSerializer(serializers.ModelSerializer):
     class Meta:
         depth = 1
-        model = Skills
+        model = Skill
         fields = '__all__'
 
 

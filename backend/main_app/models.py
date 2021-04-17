@@ -42,11 +42,12 @@ class PracticeApplication(models.Model):
     accepted = models.BooleanField(default=False)
 
 
-class Skills(models.Model):
-    name = models.CharField(max_length=255, verbose_name='Название навыка')
+class Skill(models.Model):
+    text = models.CharField(max_length=255, verbose_name='Название навыка')
+    user = models.ForeignKey('StudentM', on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return self.texts
 
 
 '''
@@ -128,7 +129,7 @@ REVIEW
 class ReviewOnStudent(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название отзыва')
     review_text = models.TextField(verbose_name='Отзыв')
-    rate = models.PositiveSmallIntegerField(verbose_name='Оценка', default=0)
+    rate = models.DecimalField(default=0, decimal_places=2, max_digits=2, verbose_name='Оценка')
     employer = models.ForeignKey('EmployerM', verbose_name='Работодатель', on_delete=models.CASCADE)
     student_for_review = models.ForeignKey('StudentM', verbose_name='Отзыв на студента', on_delete=models.CASCADE)
 
@@ -138,15 +139,17 @@ class ReviewOnStudent(models.Model):
     def save(self, *args, **kwargs):
         if self.rate > 5:
             self.rate = 5
+        if self.rate < 0:
+            self.rate = 0
         return super().save(*args, **kwargs)
 
 
 class ReviewOnEmployer(models.Model):
     name = models.CharField(max_length=255, verbose_name='Заголовок отзыва')
     review_text = models.TextField(verbose_name='Отзыв')
-    rate = models.PositiveSmallIntegerField(default=0, verbose_name='Оценка')
+    rate = models.DecimalField(default=0, decimal_places=2, max_digits=2, verbose_name='Оценка')
     student = models.ForeignKey('StudentM', verbose_name='Студент', on_delete=models.CASCADE)
-    employer_for_review = models.ForeignKey('EmpCompany', verbose_name='Отзыв о работодателе', on_delete=models.CASCADE)
+    goal = models.ForeignKey(Internship, verbose_name='Отзыв о стажировке', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -154,4 +157,6 @@ class ReviewOnEmployer(models.Model):
     def save(self, *args, **kwargs):
         if self.rate > 5:
             self.rate = 5
+        if self.rate < 0:
+            self.rate = 0
         return super().save(*args, **kwargs)
