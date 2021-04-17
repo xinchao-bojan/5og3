@@ -12,6 +12,19 @@ class Internship(models.Model):
     input_emp_competence = models.ManyToManyField('EmpCompetence', related_name='input_emp_competence')
     output_emp_competence = models.ManyToManyField('EmpCompetence', related_name='output_emp_competence')
 
+    rate = models.DecimalField(default=0, decimal_places=2, max_digits=4, verbose_name='Оценка')
+
+    def save(self, *args, **kwargs):
+        temp = 0
+        for c in self.reviewonemployer_set.all():
+            temp += c.rate
+        self.rate = temp / self.reviewonemployer_set.count()
+        if self.rate > 10:
+            self.rate = 10
+        if self.rate < 0:
+            self.rate = 0
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.name
 
@@ -47,7 +60,7 @@ class Skill(models.Model):
     user = models.ForeignKey('StudentM', on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.texts
+        return self.text
 
 
 '''
@@ -81,6 +94,18 @@ class StudentM(models.Model):
     ed_organization = models.ForeignKey(EdOrganization, on_delete=models.CASCADE)
     ed_competence = models.ManyToManyField(EdCompetence)
     emp_competence = models.ManyToManyField('EmpCompetence')
+    rate = models.DecimalField(default=0, decimal_places=2, max_digits=4, verbose_name='Оценка')
+
+    def save(self, *args, **kwargs):
+        temp = 0
+        for c in self.reviewonstudent_set.all():
+            temp += c.rate
+        self.rate = temp / self.reviewonstudent_set.count()
+        if self.rate > 10:
+            self.rate = 10
+        if self.rate < 0:
+            self.rate = 0
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.ed_organization
@@ -129,7 +154,7 @@ REVIEW
 class ReviewOnStudent(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название отзыва')
     review_text = models.TextField(verbose_name='Отзыв')
-    rate = models.DecimalField(default=0, decimal_places=2, max_digits=2, verbose_name='Оценка')
+    rate = models.DecimalField(default=0, decimal_places=2, max_digits=4, verbose_name='Оценка')
     employer = models.ForeignKey('EmployerM', verbose_name='Работодатель', on_delete=models.CASCADE)
     student_for_review = models.ForeignKey('StudentM', verbose_name='Отзыв на студента', on_delete=models.CASCADE)
 
@@ -137,17 +162,18 @@ class ReviewOnStudent(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        if self.rate > 5:
-            self.rate = 5
+        if self.rate > 10:
+            self.rate = 10
         if self.rate < 0:
             self.rate = 0
+        self.student_for_review.save()
         return super().save(*args, **kwargs)
 
 
 class ReviewOnEmployer(models.Model):
     name = models.CharField(max_length=255, verbose_name='Заголовок отзыва')
     review_text = models.TextField(verbose_name='Отзыв')
-    rate = models.DecimalField(default=0, decimal_places=2, max_digits=2, verbose_name='Оценка')
+    rate = models.DecimalField(default=0, decimal_places=2, max_digits=4, verbose_name='Оценка')
     student = models.ForeignKey('StudentM', verbose_name='Студент', on_delete=models.CASCADE)
     goal = models.ForeignKey(Internship, verbose_name='Отзыв о стажировке', on_delete=models.CASCADE)
 
@@ -155,8 +181,9 @@ class ReviewOnEmployer(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        if self.rate > 5:
-            self.rate = 5
+        if self.rate > 10:
+            self.rate = 10
         if self.rate < 0:
             self.rate = 0
+        self.goal.save()
         return super().save(*args, **kwargs)

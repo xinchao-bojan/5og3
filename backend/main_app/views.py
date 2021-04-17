@@ -387,7 +387,7 @@ class CreateReviewOnInternshipView(APIView):
 
     def post(self, request, pk):
         g = Internship.objects.get(pk=pk)
-        ReviewOnStudent.objects.create(
+        ReviewOnStudent.objects.get_or_create(
             name=request.data['name'],
             review_text=request.data['review_text'],
             rate=request.data['rate'],
@@ -403,7 +403,7 @@ class CreateReviewOnStudentView(APIView):
 
     def post(self, request, pk):
         g = StudentM.objects.get(pk=pk)
-        ReviewOnStudent.objects.create(
+        ReviewOnStudent.objects.get_or_create(
             name=request.data['name'],
             review_text=request.data['review_text'],
             rate=request.data['rate'],
