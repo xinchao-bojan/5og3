@@ -49,3 +49,10 @@ class SkillsSerializer(serializers.ModelSerializer):
         depth = 1
         model = Skills
         fields = '__all__'
+
+
+class StudentMSerializer(serializers.ModelSerializer):
+    class Meta:
+        depth = 1
+        model = StudentM
+        fields = '__all__'

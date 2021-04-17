@@ -57,3 +57,12 @@ class StartPracticeRequestView(APIView):
         o = StudentM.objects.get(user__user=request.user).ed_organization
         serializer = EdOrganizationSerializer(o.competence.all(), context={'request': request}, many=True)
         return Response(serializer.data)
+
+    def post(self, request):
+        u = StudentM.objects.get(user__user=request.user)
+        for c in request.data['ed_competence']:
+            u.ed_competence.add(EdCompetence.objects.get(pk=c['pk']))
+        for c in request.data['emp_competence']:
+            u.emp_competence.add(EmpCompetence.objects.get(pk=c['pk']))
+        serializer = StudentMSerializer(u, context={'request': request})
+        return Response(serializer.data)

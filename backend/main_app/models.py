@@ -56,6 +56,8 @@ SubUser
 class StudentM(models.Model):
     user = models.OneToOneField(StudentMore, on_delete=models.CASCADE)
     ed_organization = models.ForeignKey(EdOrganization, on_delete=models.CASCADE)
+    ed_competence = models.ManyToManyField(EdCompetence)
+    emp_competence = models.ManyToManyField('EmpCompetence')
 
 
 class Worker(models.Model):
