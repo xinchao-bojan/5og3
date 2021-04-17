@@ -49,7 +49,7 @@ class EdOrganization(models.Model):
 
 class EdCompetence(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название компетенции', unique=True)
-    emp_competence = models.ManyToManyField('EmpCompetence', related_name='emp_to_ed_competence', blank=True)
+    emp_competence = models.ManyToManyField('EmpCompetence',  blank=True)
 
     def __str__(self):
         return self.name
@@ -79,7 +79,6 @@ EMP
 
 class EmpCompetence(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название компетенции')
-    ed_competence = models.ManyToManyField('EdCompetence', related_name='ed_to_emp_competence', blank=True)
 
     def __str__(self):
         return self.name

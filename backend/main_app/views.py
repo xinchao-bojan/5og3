@@ -68,6 +68,28 @@ class StartPracticeRequestView(APIView):
         for c in request.data['ed_competence']:
             u.ed_competence.add(u.ed_organization.competence.get(pk=c['pk']))
         for c in request.data['emp_competence']:
-            u.emp_competence.add(u.ed_competence.get())
-            serializer = StudentMSerializer(u, context={'request': request})
-            return Response(serializer.data)
+
+            for elem in u.ed_competence.all():
+                print(elem)
+                for elem1 in elem.emp_competence.all():
+
+                    s = EmpCompetence.objects.get(pk=c['pk'])
+
+                    if elem1 == s:
+                        u.emp_competence.add(s)
+
+        serializer = StudentMSerializer(u, context={'request': request})
+        return Response(serializer.data)
+
+
+class ListAvailableInternshipView(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated, IsStudent]
+    serializer_class = InternshipSerializer
+    queryset = None
+
+    # def get(self, request):
+        
+
+class lol(APIView):
+    def get(self, request):
+        return Response('xyu')
