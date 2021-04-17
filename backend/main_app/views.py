@@ -146,21 +146,17 @@ class AddEmployerView(APIView):
 
 
 class CreateOrganizationView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsAdmin]
 
     def post(self, request):
-        try:
-            EdWorkerM.objects.get(user=EdWorkerMore.objects.get(user=request.user))
-            return Response('already exist', status=status.HTTP_202_ACCEPTED)
-        except EdWorkerM.DoesNotExist:
-
-            request.user.type = CustomUser.Type.EMPLOYER
-            request.user.save()
-            e = EdOrganization.objects.create(name=request.data['name'])
-            m = EdWorkerMore.objects.create(user=request.user)
-            em = EdWorkerM.objects.create(user=m, ed_organization=e)
-            serializer = EdWorkerMSerializer(em, context={'request': request})
-            return Response(serializer.data)
+        e, created  = EdOrganization.objects.get_or_create(name=request.data['name'])
+        u = CustomUser.objects.get(pk=request.data['user'])
+        u.type = CustomUser.Type.EDWORKER
+        u.save()
+        em, created = EdWorkerMore.objects.get_or_create(user=u)
+        EdWorkerM.objects.get_or_create(user=em, ed_organization=e)
+        serializer = EdOrganizationSerializer(e, context={'request': request})
+        return Response(serializer.data)
 
 
 class AddWorkerView(APIView):

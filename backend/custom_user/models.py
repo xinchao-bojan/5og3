@@ -58,7 +58,7 @@ class CustomUser(AbstractBaseUser):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.email
+        return f'{self.first_name} {self.last_name}'
 
     def make_active(self):
         self.is_active = True
@@ -167,7 +167,7 @@ class EdWorkerMore(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.user
+        return str(self.user)
 
 
 class EdWorkerManager(models.Manager):

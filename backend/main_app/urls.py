@@ -37,7 +37,7 @@ urlpatterns = [
     path('detailpractice/<int:pk>/', DetailPracticeStudentView.as_view()),
     path('detailinternship/<int:pk>/', DetailInternshipStudentView.as_view()),
 
-    path('listallpractice/', ListPracticeView.as_view()),
+    path('practice/all/', ListPracticeView.as_view()),
     path('listallinternship/', ListInternshipView.as_view()),
 
     path('addskill/', AddSkillView.as_view()),
