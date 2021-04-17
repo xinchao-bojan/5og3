@@ -8,6 +8,7 @@ class Internship(models.Model):
     name = models.CharField(max_length=255, verbose_name='Наименование стажировки')
     emp_company = models.ForeignKey('EmpCompany', verbose_name='Работодатель', on_delete=models.CASCADE)
     description = models.TextField(verbose_name='Описание стажировки')
+    date = models.CharField(max_length=255, verbose_name='Длительность стажировки')
 
     input_emp_competence = models.ManyToManyField('EmpCompetence', related_name='input_emp_competence')
     output_emp_competence = models.ManyToManyField('EmpCompetence', related_name='output_emp_competence')
@@ -23,6 +24,7 @@ class Practice(models.Model):
     ed_organization = models.ForeignKey('EdOrganization', verbose_name='Образовательная организация',
                                         on_delete=models.CASCADE)
     description = models.TextField(verbose_name='Описание практики')
+
     input_ed_competence = models.ManyToManyField('EdCompetence', related_name='input_ed_competence')
     output_ed_competence = models.ManyToManyField('EdCompetence', related_name='output_ed_competence')
 
@@ -124,7 +126,7 @@ class ReviewOnStudent(models.Model):
 class ReviewOnEmployer(models.Model):
     name = models.CharField(max_length=255, verbose_name='Заголовок отзыва')
     review_text = models.TextField(verbose_name='Отзыв')
-    rate = models.PositiveSmallIntegerField(default=0, verbose_name='Оценка')
+    rate = models.PositiveIntegerField(default=0, verbose_name='Оценка')
     student = models.ForeignKey('StudentM', verbose_name='Студент', on_delete=models.CASCADE)
     employer_for_review = models.ForeignKey('EmpCompany', verbose_name='Отзыв о работодателе', on_delete=models.CASCADE)
 
