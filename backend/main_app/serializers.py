@@ -62,7 +62,7 @@ class PracticeSerializer(serializers.ModelSerializer):
     class Meta:
         depth = 1
         model = Practice
-        fields = ['id', 'name', 'ed_organization__name', 'description', 'input_ed_competence', 'output_ed_competence']
+        fields = ['id', 'name', 'ed_organization', 'description', 'input_ed_competence', 'output_ed_competence']
 
         input_ed_competence = EdCompetenceSerializer()
         output_ed_competence = EdCompetenceSerializer()

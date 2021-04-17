@@ -149,13 +149,29 @@ class CreateOrganizationView(APIView):
     permission_classes = [permissions.IsAuthenticated, IsAdmin]
 
     def post(self, request):
-        e, created  = EdOrganization.objects.get_or_create(name=request.data['name'])
+        e, created = EdOrganization.objects.get_or_create(name=request.data['name'])
         u = CustomUser.objects.get(pk=request.data['user'])
         u.type = CustomUser.Type.EDWORKER
         u.save()
         em, created = EdWorkerMore.objects.get_or_create(user=u)
         EdWorkerM.objects.get_or_create(user=em, ed_organization=e)
         serializer = EdOrganizationSerializer(e, context={'request': request})
+        return Response(serializer.data)
+
+
+class AddEdCompetence(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsEdWorker]
+
+    def post(self, request):
+        e = EdWorkerM.objects.get(user=EdWorkerMore.objects.get(user=request.user))
+        o = e.ed_organization
+        for competence in request.data['competence']:
+            ed = EdCompetence.objects.create(name=competence['name'])
+            for elem in competence['emp']:
+                ed.emp_competence.add(EmpCompetence.objects.get(pk=elem))
+            ed.save()
+            o.competence.add(ed)
+        serializer = EdOrganizationSerializer(o, context={'request': request})
         return Response(serializer.data)
 
 
