@@ -21,6 +21,11 @@ from custom_user.permissions import IsStudent, IsEdWorker
 #         self.queryset = Practice.objects.filter(
 #             ed_organization=StudentMore.objects.get(user=request.user).ed_organization)
 #         return super().list(request)
+from ..custom_user.models import StudentMore, EmployerMore, CustomUser, EdWorkerMore
+from ..custom_user.permissions import IsEmployer
+from ..custom_user.serializers import StudentSerializer
+
+
 class CompanyListView(generics.ListAPIView):
     queryset = EmpCompany
     serializer_class = EmpCompanySerializer
@@ -383,10 +388,16 @@ class ListInternshipView(generics.ListAPIView):
     serializer_class = InternshipSerializer
     permission_classes = [permissions.IsAuthenticated, IsEmployer]
 
+    def get(self, request):
+        print(self.queryset)
+        return super().list(request)
+
 
 class ListPracticeView(generics.ListAPIView):
     queryset = Practice.objects.all()
     serializer_class = PracticeSerializer
     permission_classes = [permissions.IsAuthenticated, IsEdWorker]
 
-
+    def get(self, request):
+        print(self.queryset)
+        return super().list(request)
