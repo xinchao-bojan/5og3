@@ -2,13 +2,14 @@
   <v-col>
     <v-row class="bg_color">
       <div class="container">
+        <v-row>
         
           <v-col cols="6">
             <v-row>
-              <h1 class="title1">Добро пожаловать в сервис для поиска стажировок</h1>
+              <h1 class="title1">BoostUP - первый в России сервис по поиску стажировок</h1>
             </v-row>
             <v-row>
-              <p class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Platea massa elementum odio in pellentesque in. Quisque fermentum egestas egestas egestas magna commodo aenean ultricies.</p>
+              <p class="description">Наш сервис помогает студентам найти интересную и подходящую для них стажировку, а работодателям - талантливых работников</p>
             </v-row>
             <v-row>
               <v-col cols="6">
@@ -32,13 +33,13 @@
               </v-col>         
             </v-row>
           </v-col>
-          
+          <v-col cols="6">
+            <img src="./pic.png" class="photo">
+          </v-col> 
+        </v-row>
       </div>
-      <v-col cols="6">
-        <img src="./pic.png" class="photo">
-      </v-col> 
     </v-row>
-    <div class="container">
+    <div class="container1">
       <v-row class="section2">
         <v-col cols="5">
           <h2 class="title2">Лучшие работодатели</h2>
@@ -103,6 +104,24 @@
           <InternshipCard />
         </v-col>
       </v-row>
+      <v-row>
+        <v-col>
+          <v-row>
+            <h2>Временная кнопка</h2>
+          </v-row>
+          <v-row>
+            <v-col cols="6">
+              <router-link to="/StudentSearchPage" class="link">
+                <v-btn
+                color="#1319AD"
+                outlined
+                rounded
+                >Поиск студентов</v-btn>
+              </router-link>
+            </v-col>            
+          </v-row>
+        </v-col>
+      </v-row>
     </div>
   </v-col>
 </template>
@@ -136,6 +155,12 @@ export default {
 .container{
   margin: 0 auto;
   width: 1170px;
+  justify-content: space-between;
+}
+
+.container1{
+  margin: 0 auto;
+  width: 1170px;
 }
 
 .title1{
@@ -145,6 +170,7 @@ export default {
   font-size: 50px;
   line-height: 61px;
   color: #fff;
+  margin-top: 10%;
 }
 
 .description{

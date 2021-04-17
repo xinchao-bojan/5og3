@@ -1,5 +1,6 @@
 import Home from '../components/Home.vue'
 import EmployersList from '../components/EmployersList.vue'
+import StudentSearchPage from '../components/StudentSearchPage.vue'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
@@ -13,6 +14,11 @@ const routes = [
     path: '/EmployersList',
     name: 'EmployersList',
     component: EmployersList
+  },
+  {
+    path: '/StudentSearchPage',
+    name: 'StudentSearchPage',
+    component: StudentSearchPage
   }
 ]
 
