@@ -11,16 +11,7 @@ from custom_user.serializers import *
 from custom_user.permissions import IsStudent, IsEdWorker
 
 
-# class ListPracticeView(generics.ListAPIView):
-#     permission_classes = [permissions.IsAuthenticated, IsStudent or IsEdWorker]
-#     serializer_class = PracticeSerializer
-#     queryset = None
-#
-#     def get(self, request):
-#         print(StudentMore.objects.get(user=request.user))
-#         self.queryset = Practice.objects.filter(
-#             ed_organization=StudentMore.objects.get(user=request.user).ed_organization)
-#         return super().list(request)
+
 class CompanyListView(generics.ListAPIView):
     queryset = EmpCompany
     serializer_class = EmpCompanySerializer
@@ -51,11 +42,7 @@ class AddStudentMoreView(APIView):
                     sex=d[request.data['sex']],
                     date_of_birth=request.data['date']
                 )
-                print(request.data['ed_organization'])
-                print(request.data)
-                print(EdOrganization.objects.get(name='МИРЭА'))
-                print(EdOrganization.objects.get(
-                    name=request.data['ed_organization']))
+
                 StudentM.objects.create(user=more,
                                         ed_organization=EdOrganization.objects.get(
                                             name=request.data['ed_organization']))
@@ -74,7 +61,6 @@ class StartPracticeRequestView(generics.ListAPIView):
     queryset = None
 
     def get(self, request):
-        print(StudentMore.objects.get(user=request.user))
         self.queryset = Practice.objects.filter(
             ed_organization=StudentMore.objects.get(user=request.user).ed_organization)
         return super().list(request)
@@ -89,7 +75,6 @@ class StartPracticeRequestView(generics.ListAPIView):
         for c in request.data['emp_competence']:
 
             for elem in u.ed_competence.all():
-                print(elem)
                 for elem1 in elem.emp_competence.all():
 
                     s = EmpCompetence.objects.get(pk=c['pk'])
@@ -125,7 +110,6 @@ class ListAvailableInternshipView(generics.ListAPIView):
         for w in sorted_internships_keys:
             sorted_internships[w] = internships_rate[w]
 
-        print(sorted_internships)
 
         serializer = InternshipSerializer(sorted_internships.keys(), context={'request': request}, many=True)
         return Response(serializer.data)
