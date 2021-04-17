@@ -4,19 +4,26 @@ from .models import *
 
 class StudentMSerializer(object):
     pass
+
+
 class PracticeSerializer(object):
     pass
+
+
 class EdCompetenceSerializer(object):
     pass
+
+
 class InternshipSerializer(object):
     pass
+
 
 class EdOrganizationSerializer(serializers.ModelSerializer):
     class Meta:
         depth = 1
         model = EdOrganization
         fields = ['id', 'name', 'competence', 'studentm_set', 'practice_set']
-        
+
         studentm_set = StudentMSerializer()
         practice_set = PracticeSerializer()
 
@@ -52,7 +59,7 @@ class InternshipSerializer(serializers.ModelSerializer):
     class Meta:
         depth = 1
         model = Internship
-        fields = ['id', 'name', 'emp_company__name', 'description', 'input_emp_competence', 'output_emp_competence']
+        fields = ['id', 'name', 'description', 'input_emp_competence', 'output_emp_competence']
 
         input_emp_competence = EmpCompetenceSerializer()
         output_emp_competence = EmpCompetenceSerializer()
@@ -81,7 +88,7 @@ class StudentMSerializer(serializers.ModelSerializer):
     class Meta:
         depth = 1
         model = StudentM
-        fields = ['id', 'user__user__user__first_name', 'user__user__user__last_name', 'user__user__user__email', 'ed_organization', 'ed_competence', 'emp_competence', 'rate']
+        fields = ['id', 'ed_organization', 'ed_competence', 'emp_competence', 'rate']
 
         ed_organization = EdOrganizationSerializer()
         ed_competence = EdCompetenceSerializer()
@@ -92,7 +99,7 @@ class EdWorkerMSerializer(serializers.ModelSerializer):
     class Meta:
         depth = 1
         model = EdWorkerM
-        fields = ['id', 'user__user__user__first_name', 'user__user__user__last_name', 'user__user__user__email', 'ed_organization']
+        fields = ['id', 'ed_organization']
 
         ed_organization = EdOrganizationSerializer()
 
@@ -101,7 +108,7 @@ class EmployerMSerializer(serializers.ModelSerializer):
     class Meta:
         depth = 1
         model = EmployerM
-        fields = ['id', 'user__user__user__first_name', 'user__user__user__last_name', 'user__user__user__email', 'emp_company']
+        fields = ['id', 'emp_company']
 
         emp_company = EmpCompanySerializer()
 

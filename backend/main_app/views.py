@@ -389,8 +389,9 @@ class AddSkillView(APIView):
 
     def post(self, request):
         queryset = []
+        u = StudentM.objects.get(user=StudentMore.objects.get(user=request.user))
         for skillset in request.data['skillset']:
-            s = Skill.objects.create(user=request.user, text=skillset['text'])
+            s = Skill.objects.create(user=u, text=skillset['text'])
             queryset.append(s)
         serializer = SkillSerializer(s, context={'request': request})
         return Response(serializer.data)

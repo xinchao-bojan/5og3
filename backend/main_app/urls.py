@@ -28,7 +28,7 @@ urlpatterns = [
 
     path('companylist/', CompanyListView.as_view()),
     path('organizationlist/', OrganizationListView.as_view()),
-    path('acceptinternship/', AcceptInternship.as_view()),
+    path('acceptinternship/<int:pk>/', AcceptInternship.as_view()),
 
     path('createpractice/', CreatePracticeView.as_view()),
     path('endpractice/', EndPracticeView.as_view()),
