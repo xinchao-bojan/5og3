@@ -126,7 +126,7 @@ class ReviewOnStudent(models.Model):
 class ReviewOnEmployer(models.Model):
     name = models.CharField(max_length=255, verbose_name='Заголовок отзыва')
     review_text = models.TextField(verbose_name='Отзыв')
-    rate = models.PositiveIntegerField(default=0, verbose_name='Оценка')
+    rate = models.PositiveSmallIntegerField(default=0, verbose_name='Оценка')
     student = models.ForeignKey('StudentM', verbose_name='Студент', on_delete=models.CASCADE)
     employer_for_review = models.ForeignKey('EmpCompany', verbose_name='Отзыв о работодателе', on_delete=models.CASCADE)
 
