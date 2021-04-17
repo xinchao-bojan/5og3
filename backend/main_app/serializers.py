@@ -6,7 +6,7 @@ class EdOrganizationSerializer(serializers.ModelSerializer):
     class Meta:
         depth = 1
         model = EdOrganization
-        fields = '__all__'
+        fields = ['id', 'name', 'competence', 'studentm_set', 'practice_set']
 
 
 class EmpCompanySerializer(serializers.ModelSerializer):

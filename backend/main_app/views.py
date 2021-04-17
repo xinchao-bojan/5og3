@@ -11,7 +11,6 @@ from custom_user.serializers import *
 from custom_user.permissions import IsStudent, IsEdWorker
 
 
-
 class CompanyListView(generics.ListAPIView):
     queryset = EmpCompany
     serializer_class = EmpCompanySerializer
@@ -109,7 +108,6 @@ class ListAvailableInternshipView(generics.ListAPIView):
                                          key=internships_rate.get)
         for w in sorted_internships_keys:
             sorted_internships[w] = internships_rate[w]
-
 
         serializer = InternshipSerializer(sorted_internships.keys(), context={'request': request}, many=True)
         return Response(serializer.data)
