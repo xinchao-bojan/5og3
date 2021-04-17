@@ -5,9 +5,7 @@
         <v-row>
           <v-col cols="6">
             <v-row>
-              <h1 class="title1">
-                BoostUP - первый в России сервис по поиску стажировок
-              </h1>
+              <h1 class="title1">BustUP - первый в России сервис по поиску стажировок</h1>
             </v-row>
             <v-row>
               <p class="description">
