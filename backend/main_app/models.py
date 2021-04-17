@@ -12,10 +12,14 @@ class Internship(models.Model):
     input_emp_competence = models.ManyToManyField('EmpCompetence', related_name='input_emp_competence')
     output_emp_competence = models.ManyToManyField('EmpCompetence', related_name='output_emp_competence')
 
-    students = models.ManyToManyField('StudentM')
-
     def __str__(self):
         return self.name
+
+
+class InternshipApplication(models.Model):
+    ed_organization = models.ForeignKey('EdOrganization', on_delete=models.CASCADE, null=True)
+    internship = models.ForeignKey('Internship', on_delete=models.CASCADE)
+    student = models.ForeignKey('StudentM', on_delete=models.CASCADE)
 
 
 class Practice(models.Model):
@@ -70,12 +74,20 @@ class StudentM(models.Model):
     emp_competence = models.ManyToManyField('EmpCompetence')
 
     def __str__(self):
-        return self.user
+        return self.ed_organization
 
 
 class EmployerM(models.Model):
     user = models.OneToOneField(EmployerMore, on_delete=models.CASCADE)
     emp_company = models.ForeignKey('EmpCompany', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user
+
+
+class EdWorkerM(models.Model):
+    user = models.OneToOneField(EdWorkerMore, on_delete=models.CASCADE)
+    ed_organization = models.ForeignKey('EmpCompany', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.user

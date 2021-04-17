@@ -83,7 +83,3 @@ class UpdateMyselfView(APIView):
 #         return Response(serializer.data, status=status.HTTP_200_OK)
 #
 
-class KEK(APIView):
-    def get(self, request):
-        serializer = pretty_serializer(request)
-        return Response(serializer.data, status=status.HTTP_200_OK)

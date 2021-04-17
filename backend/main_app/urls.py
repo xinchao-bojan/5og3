@@ -9,13 +9,19 @@ urlpatterns = [
     path('startpractice/', StartPracticeRequestView.as_view()),
 
     path('startcompany/', CreateCompanyView.as_view()),
+    path('hirecompany/', AddEmployerView.as_view()),
+
+    path('startorganization/', CreateOrganizationView.as_view()),
+    path('hireorganization/', AddWorkerView.as_view()),
+
     path('createinternship/', CreateInternshipView.as_view()),
-    path('applyinternship/<int:pk>/', ApplyForInternship.as_view()),
+
+    path('applyinternship/<int:pk>/', ApplyForInternshipView.as_view()),
+    path('inviteinternship/<int:pk>/', InviteForInternshipView.as_view()),
+    path('adviceinternship/<int:pk>/', AdviceForInternshipView.as_view()),
 
     path('listinternship/', ListAvailableInternshipView.as_view()),
 
     # path('practice/list/', ListPracticeView.as_view()),
-
-    path('test/', lol.as_view()),
 
 ]
