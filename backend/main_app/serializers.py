@@ -56,3 +56,10 @@ class StudentMSerializer(serializers.ModelSerializer):
         depth = 1
         model = StudentM
         fields = '__all__'
+
+
+class EmployerMSerializer(serializers.ModelSerializer):
+    class Meta:
+        depth = 1
+        model = EmployerM
+        fields = '__all__'

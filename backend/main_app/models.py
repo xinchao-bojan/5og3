@@ -1,7 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 
-from custom_user.models import StudentMore, EdWorkerMore
+from custom_user.models import StudentMore, EdWorkerMore, EmployerMore
+
 
 class Internship(models.Model):
     name = models.CharField(max_length=255, verbose_name='Наименование стажировки')
@@ -10,6 +11,8 @@ class Internship(models.Model):
 
     input_emp_competence = models.ManyToManyField('EmpCompetence', related_name='input_emp_competence')
     output_emp_competence = models.ManyToManyField('EmpCompetence', related_name='output_emp_competence')
+
+    students = models.ManyToManyField('StudentM')
 
     def __str__(self):
         return self.name
@@ -49,7 +52,7 @@ class EdOrganization(models.Model):
 
 class EdCompetence(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название компетенции', unique=True)
-    emp_competence = models.ManyToManyField('EmpCompetence',  blank=True)
+    emp_competence = models.ManyToManyField('EmpCompetence', blank=True)
 
     def __str__(self):
         return self.name
@@ -66,10 +69,16 @@ class StudentM(models.Model):
     ed_competence = models.ManyToManyField(EdCompetence)
     emp_competence = models.ManyToManyField('EmpCompetence')
 
+    def __str__(self):
+        return self.user
 
-class Worker(models.Model):
-    user = models.OneToOneField(EdWorkerMore, on_delete=models.CASCADE)
-    ed_organization = models.ForeignKey(EdOrganization, on_delete=models.CASCADE)
+
+class EmployerM(models.Model):
+    user = models.OneToOneField(EmployerMore, on_delete=models.CASCADE)
+    emp_company = models.ForeignKey('EmpCompany', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user
 
 
 '''
@@ -78,7 +87,7 @@ EMP
 
 
 class EmpCompetence(models.Model):
-    name = models.CharField(max_length=255, verbose_name='Название компетенции')
+    name = models.CharField(max_length=255, verbose_name='Название компетенции', unique=True)
 
     def __str__(self):
         return self.name
@@ -99,15 +108,30 @@ REVIEW
 class ReviewOnStudent(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название отзыва')
     review_text = models.TextField(verbose_name='Отзыв')
-    rate = models.IntegerField(max_length=5, verbose_name='Оценка')
-    employer = models.ForeignKey('Worker', verbose_name='Работодатель', on_delete=models.CASCADE)
+    rate = models.PositiveSmallIntegerField(verbose_name='Оценка', default=0)
+    employer = models.ForeignKey('EmployerM', verbose_name='Работодатель', on_delete=models.CASCADE)
     student_for_review = models.ForeignKey('StudentM', verbose_name='Отзыв на студента', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if self.rate > 5:
+            self.rate = 5
+        return super().save(*args, **kwargs)
 
 
 class ReviewOnEmployer(models.Model):
     name = models.CharField(max_length=255, verbose_name='Заголовок отзыва')
     review_text = models.TextField(verbose_name='Отзыв')
-    rate = models.IntegerField(max_length=5,verbose_name='Оценка')
+    rate = models.PositiveSmallIntegerField(default=0, verbose_name='Оценка')
     student = models.ForeignKey('StudentM', verbose_name='Студент', on_delete=models.CASCADE)
     employer_for_review = models.ForeignKey('EmpCompany', verbose_name='Отзыв о работодателе', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if self.rate > 5:
+            self.rate = 5
+        return super().save(*args, **kwargs)

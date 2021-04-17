@@ -4,12 +4,11 @@ from rest_framework.views import APIView
 from rest_framework import generics, status, permissions
 from rest_framework.exceptions import ValidationError
 
-from custom_user.models import *
 from .serializers import *
 from custom_user.permissions import *
 from custom_user.serializers import *
 
-from ..custom_user.permissions import IsStudent, IsEdWorker
+from custom_user.permissions import IsStudent, IsEdWorker
 
 
 class ListPracticeView(generics.ListAPIView):
@@ -29,8 +28,8 @@ class AddStudentMoreView(APIView):
 
     def put(self, request):
         try:
-            if StudentMore.objects.get(user=request.user):
-                return Response('already exist', status=status.HTTP_202_ACCEPTED)
+            StudentMore.objects.get(user=request.user)
+            return Response('already exist', status=status.HTTP_202_ACCEPTED)
         except StudentMore.DoesNotExist:
             try:
                 request.user.type = CustomUser.Type.STUDENT
@@ -88,8 +87,79 @@ class ListAvailableInternshipView(generics.ListAPIView):
     queryset = None
 
     # def get(self, request):
-        
+
+
+class CreateCompanyView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        try:
+            EmployerMore.objects.get(user=request.user)
+            return Response('already exist', status=status.HTTP_202_ACCEPTED)
+        except EmployerMore.DoesNotExist:
+            request.user.type = CustomUser.Type.EMPLOYER
+            request.user.save()
+            e = EmpCompany.objects.create(name=request.data['name'])
+            m = EmployerMore.objects.create(user=request.user)
+            em = EmployerM.objects.create(user=m, emp_company=e)
+            serializer = EmployerMSerializer(em, context={'request': request})
+            return Response(serializer.data)
+
+
+class CreateInternshipView(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsEmployer]
+
+    def post(self, request):
+        m = EmployerMore.objects.get(user=request.user)
+        u = EmployerM.objects.get(user=m)
+        i = Internship.objects.create(
+            name=request.data['name'],
+            emp_company=u.emp_company,
+            description=request.data['description'])
+        for input in request.data['input']:
+            i.input_emp_competence.add(EmpCompetence.objects.get(pk=input['pk']))
+        for output in request.data['output']:
+            i.output_emp_competence.add(EmpCompetence.objects.get(pk=output['pk']))
+        serializer = InternshipSerializer(i, context={'request': request})
+        return Response(serializer.data)
+
+
+class ApplyForInternship(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsStudent]
+
+    def put(self, request, pk):
+        i = Internship.objects.get(pk=pk)
+        s = StudentM.objects.get(user=StudentMore.objects.get(user=request.user))
+        i.students.add(s)
+        return Response(status=status.HTTP_200_OK)
+
 
 class lol(APIView):
     def get(self, request):
-        return Response('xyu')
+        d = [
+            {
+                'id': 1,
+                'first_name': 'Ivan',
+                'last_name': 'Malov',
+                'date': '06-16-2001',
+                'sex': 1,
+                'email': 'sosu@xyu.ru',
+                'organization': {
+                    'name': 'SAS',
+                    'description': 'sasi xyu'
+                }
+            },
+            {
+                'id': 2,
+                'first_name': 'MAx',
+                'last_name': 'Garshin',
+                'date': '06-16-2001',
+                'sex': 1,
+                'email': 'sosu@xyu.ru',
+                'organization': {
+                    'name': 'SAS',
+                    'description': 'sasi xyu'
+                }
+            }
+        ]
+        return Response(d)
