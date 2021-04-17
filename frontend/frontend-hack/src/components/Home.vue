@@ -46,14 +46,16 @@
         <v-spacer></v-spacer>
         <v-col cols="1" >
           <v-layout justify-end>
-            <v-icon
-            color="#000"
-              large
-              @click="next"
-            >
-              mdi-arrow-right
-            </v-icon>
-            </v-layout>
+            <router-link to="/EmployersList" class="link">
+              <v-icon
+                color="#000"
+                large
+                @click="next"
+              >
+                mdi-arrow-right
+              </v-icon>
+            </router-link>
+          </v-layout>
         </v-col>     
       </v-row>
       <v-row>
@@ -186,5 +188,9 @@ export default {
   font-size: 30px;
   line-height: 37px;
   margin-bottom: 5%;
+}
+
+.link{
+  text-decoration: none;
 }
 </style>
