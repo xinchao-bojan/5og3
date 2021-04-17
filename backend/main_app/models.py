@@ -12,6 +12,19 @@ class Internship(models.Model):
     input_emp_competence = models.ManyToManyField('EmpCompetence', related_name='input_emp_competence')
     output_emp_competence = models.ManyToManyField('EmpCompetence', related_name='output_emp_competence')
 
+    rate = models.DecimalField(default=0, decimal_places=2, max_digits=2, verbose_name='Оценка')
+
+    def save(self, *args, **kwargs):
+        temp = 0
+        for c in self.reviewonemployer_set.all():
+            temp += c.rate
+        self.rate = temp / self.reviewonemployer_set.count()
+        if self.rate > 10:
+            self.rate = 10
+        if self.rate < 0:
+            self.rate = 0
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.name
 
@@ -81,6 +94,18 @@ class StudentM(models.Model):
     ed_organization = models.ForeignKey(EdOrganization, on_delete=models.CASCADE)
     ed_competence = models.ManyToManyField(EdCompetence)
     emp_competence = models.ManyToManyField('EmpCompetence')
+    rate = models.DecimalField(default=0, decimal_places=2, max_digits=2, verbose_name='Оценка')
+
+    def save(self, *args, **kwargs):
+        temp = 0
+        for c in self.reviewonstudent_set.all():
+            temp += c.rate
+        self.rate = temp / self.reviewonstudent_set.count()
+        if self.rate > 10:
+            self.rate = 10
+        if self.rate < 0:
+            self.rate = 0
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.ed_organization
@@ -137,10 +162,11 @@ class ReviewOnStudent(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        if self.rate > 5:
-            self.rate = 5
+        if self.rate > 10:
+            self.rate = 10
         if self.rate < 0:
             self.rate = 0
+        self.student_for_review.save()
         return super().save(*args, **kwargs)
 
 
@@ -155,8 +181,9 @@ class ReviewOnEmployer(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        if self.rate > 5:
-            self.rate = 5
+        if self.rate > 10:
+            self.rate = 10
         if self.rate < 0:
             self.rate = 0
+        self.goal.save()
         return super().save(*args, **kwargs)
