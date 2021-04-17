@@ -49,7 +49,7 @@ class EdOrganization(models.Model):
 
 class EdCompetence(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название компетенции', unique=True)
-    emp_competence = models.ManyToManyField('EmpCompetence', related_name='emp_to_ed_competence', blank=True)
+    emp_competence = models.ManyToManyField('EmpCompetence',  blank=True)
 
     def __str__(self):
         return self.name
@@ -79,7 +79,6 @@ EMP
 
 class EmpCompetence(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название компетенции')
-    ed_competence = models.ManyToManyField('EdCompetence', related_name='ed_to_emp_competence', blank=True)
 
     def __str__(self):
         return self.name
@@ -100,13 +99,13 @@ REVIEW
 class ReviewOnStudent(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название отзыва')
     review_text = models.TextField(verbose_name='Отзыв')
-    employer = models.ForeignKey('Worker', verbose_name='Работодатель')
-    student_for_review = models.ForeignKey('StudentM', verbose_name='Отзыв на студента')
+    employer = models.ForeignKey('Worker', verbose_name='Работодатель',on_delete=models.CASCADE)
+    student_for_review = models.ForeignKey('StudentM', verbose_name='Отзыв на студента',on_delete=models.CASCADE)
 
 
 class ReviewOnEmployer(models.Model):
     name = models.CharField(max_length=255, verbose_name='Заголовок отзыва')
     review_text = models.TextField(verbose_name='Отзыв')
-    student = models.ForeignKey('StudentM', verbose_name='Студент')
-    employer_for_review = models.ForeignKey('EmpCompany', verbose_name='Отзыв о работодателе')
+    student = models.ForeignKey('StudentM', verbose_name='Студент',on_delete=models.CASCADE)
+    employer_for_review = models.ForeignKey('EmpCompany', verbose_name='Отзыв о работодателе',on_delete=models.CASCADE)
 
