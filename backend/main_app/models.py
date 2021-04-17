@@ -121,7 +121,7 @@ class EmployerM(models.Model):
 
 class EdWorkerM(models.Model):
     user = models.OneToOneField(EdWorkerMore, on_delete=models.CASCADE)
-    ed_organization = models.ForeignKey('EmpCompany', on_delete=models.CASCADE)
+    ed_organization = models.ForeignKey('EdCompany', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.user
@@ -134,6 +134,7 @@ EMP
 
 class EmpCompetence(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название компетенции', unique=True)
+    ed_competence = models.ManyToManyField('EdCompetence', blank=True)
 
     def __str__(self):
         return self.name
