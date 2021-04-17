@@ -21,6 +21,16 @@ from custom_user.permissions import IsStudent, IsEdWorker
 #         self.queryset = Practice.objects.filter(
 #             ed_organization=StudentMore.objects.get(user=request.user).ed_organization)
 #         return super().list(request)
+class CompanyListView(generics.ListAPIView):
+    queryset = EmpCompany
+    serializer_class = EmpCompanySerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class OrganizationListView(generics.ListAPIView):
+    queryset = EdOrganization
+    serializer_class = EdOrganizationSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class AddStudentMoreView(APIView):
@@ -266,3 +276,44 @@ class AdviceForInternshipView(APIView):
         )
         serializer = InternshipApplicationSerializer(i, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class CreateCompetenceView(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsAdmin]
+
+    def emp(self, request):
+        queryset = []
+        a = EmpCompetence.objects.create(name=request.data['name'])
+        for ed in request.data['related']:
+            a.edcompetence_set.add(EdCompetence.objects.get(pk=ed['pk']))
+            queryset.append(a)
+        a.save()
+        return EmpCompetenceSerializer(queryset, many=True, context={'request': request})
+
+    def ed(self, request):
+        queryset = []
+        a = EdCompetence.objects.create(name=request.data['name'])
+        for emp in request.data['related']:
+            a.emp_competence.add(EmpCompetence.objects.get(pk=emp['pk']))
+            queryset.append(a)
+        a.save()
+
+        return EdCompetenceSerializer(queryset, many=True, context={'request': request})
+
+    def post(self, request):
+        d = {
+            'emp': self.emp,
+            'ed': self.ed,
+        }
+        serializer = d[request.data['type']](request)
+        return Response(serializer.data)
+
+
+class AcceptInternship(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsAdmin]
+
+    def post(self, request, pk):
+        i = InternshipApplication.objects.get(pk=pk)
+        i.accepted = True
+        i.save()
+        return Response(i.student.user.user.email)
