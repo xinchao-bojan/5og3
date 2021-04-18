@@ -6,7 +6,7 @@
           <v-col>
             <v-row>
               <v-col cols="6" class="colp">
-                <h3 class="card_title">{{ this.$store.state.employers[0] }}</h3>
+                <h3 class="card_title">Mail.ru Group</h3>
               </v-col>
               <v-spacer></v-spacer>
               <v-col>

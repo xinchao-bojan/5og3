@@ -15,7 +15,9 @@
               </v-layout>
             </v-col>
             <v-col cols="3">
-              <p class="app_text">Образовательные организации</p>
+              <router-link class="app_text" to="/EducationalOrganization">
+                <p class="app_text">Образовательные организации</p>
+              </router-link>
             </v-col>
             <v-spacer> </v-spacer>
             <v-col cols="2" justify-end v-if="!isLoggedIn">
@@ -46,7 +48,7 @@
               <v-layout justify-end>
                 <router-link to="/">
                   <a class="nav-link" @click="logout">
-                    <img src="@/assets/icon_logout.svg" alt="">
+                    <img src="@/assets/icon_logout.svg" alt="" />
                   </a>
                 </router-link>
               </v-layout>
@@ -78,7 +80,7 @@ export default {
         console.log("Вы вышли из системы");
         this.$router.push("/Authorization").catch(() => {});
       });
-    }
+    },
   },
 };
 </script>

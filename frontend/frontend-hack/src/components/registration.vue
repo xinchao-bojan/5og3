@@ -193,7 +193,7 @@ export default {
       e.preventDefault();
       // const headers = "Access-Control-Allow-Origin: *"
       axios
-        .post("https://9021260458c0.ngrok.io/api/auth/users/", {
+        .post("https://656873ee46cf.ngrok.io/api/auth/users/", {
           first_name: this.firstname,
           last_name: this.secondname,
           email: this.email,
@@ -202,7 +202,7 @@ export default {
         .then((response) => {
           console.log("response status: ", response.status);
           axios
-            .post("https://9021260458c0.ngrok.io/api/auth/jwt/create/", {
+            .post("https://656873ee46cf.ngrok.io/api/auth/jwt/create/", {
               email: this.email,
               password: this.password,
             })
@@ -212,7 +212,7 @@ export default {
               console.log("JWT response data: ", response.data.access);
               axios
                 .request({
-                  url: "https://9021260458c0.ngrok.io/api/addinfo/",
+                  url: "https://656873ee46cf.ngrok.io/api/addinfo/",
                   method: "put",
                   headers: {
                     Authorization: "Bearer " + response.data.access,
@@ -225,6 +225,10 @@ export default {
                 })
                 .then((response) => {
                   console.log("ADDINFO response status: ", response.status);
+                  if (response.status === 200) {
+                      this.$router.push("/");
+                  }
+                  else(console.log("error"))
                 })
                 .catch(function (error) {
                   console.error(error.response);

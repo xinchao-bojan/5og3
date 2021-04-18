@@ -3,14 +3,16 @@
     <div class="profile-wrapper">
       <div class="profile-card col-4">
         <div class="profile__name profile-item">
-          <span class="profile__attr">Костя</span>
+          <span class="profile__attr"
+            >{{ user.firstname }} {{ user.lastname }}</span
+          >
         </div>
         <br />
         <hr />
         <br />
         <div class="profile__sex profile-item">
           <span class="profile__attr">Пол: </span>
-          <span>Мужской</span>
+          <span>{{ user.sex }}</span>
         </div>
         <div class="profile__age profile-item">
           <span class="profile__attr">Возраст: </span>
@@ -18,29 +20,33 @@
         </div>
         <div class="profile__institut profile-item">
           <span class="profile__attr">Вуз: </span>
-          <span>РТУ МИРЭА</span>
+          <span>{{ user.university }}</span>
         </div>
         <div class="profile__route profile-item">
           <span class="profile__attr">Направление: </span>
-          <span>Программная инженерия</span>
+          <span>{{ user.direction }}</span>
         </div>
       </div>
       <div class="profile-change col-8">
         <div class="btn-div">
-          <button class="btn-change">Редактировать профиль</button>
+          <router-link to="/ChangeStudentCard">
+            <button class="btn-change">Редактировать профиль</button>
+          </router-link>
         </div>
         <div class="profile-compet">
           <h3 style="margin-bottom: 30px">Компетенции</h3>
           <div class="list-compet">
-            <li class="__item">Разработка мобильных приложений</li>
-            <li class="__item">Дизайн Интерфейсов</li>
-            <li class="__item">Разработка веб-сайтов</li>
-            <li class="__item">VR разработка</li>
+            <li class="__item" v-for="item in user.comps" :key="item">
+              {{ item }}
+            </li>
           </div>
         </div>
       </div>
     </div>
+    <br />
     <hr />
+    <br />
+    <br />
     <div class="internships">
       <h2>Предлагаемые стажировки</h2>
       <div class="proposed">
@@ -80,7 +86,7 @@
             >
           </div>
           <div class="col-4 skills">
-            <h4>Требуемые навыки</h4>
+            <h4>Требуемые Компетенции</h4>
             <div class="list-compet">
               <li class="__item">Разработка мобильных приложений</li>
               <li class="__item">Дизайн Интерфейсов</li>
@@ -97,7 +103,6 @@
           </div>
         </div>
       </div>
-      <hr>
     </div>
   </div>
 </template>
@@ -106,6 +111,24 @@ import { mapActions, mapGetters } from "vuex";
 
 export default {
   setup() {},
+  data() {
+    return {
+      user: {
+        firstname: "Константин",
+        lastname: "Суроегин",
+        sex: "Мужской",
+        university: "РТУ МИРЭА",
+        dateBorn: "2021-01-02",
+        direction: "Программная инженерия",
+        comps: [
+          "Разработка мобильных приложений",
+          "Дизайн Интерфейсов",
+          "Разработка веб-сайтов",
+          "VR разработка",
+        ],
+      },
+    };
+  },
   methods: {
     ...mapActions(["GET_EMPLOYERS_FROM_API"]),
   },
@@ -115,7 +138,6 @@ export default {
   mounted() {
     console.log("hello from mounted ARTICLES: ");
     this.GET_EMPLOYERS_FROM_API();
-    console.log("jopa");
   },
 };
 </script>
@@ -172,7 +194,7 @@ export default {
     border-radius: 50px;
     margin-right: 15px;
     margin-bottom: 15px;
-    padding: 6px 10px;
+    padding: 3px 14px;
   }
 }
 
@@ -185,7 +207,7 @@ export default {
       display: flex;
       border: 1px solid black;
       border-radius: 10px;
-      margin-bottom: 45px;
+      margin-bottom: 25px;
       .descr {
         h4 {
           color: #1319ad;

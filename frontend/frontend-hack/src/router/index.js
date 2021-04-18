@@ -4,6 +4,9 @@ import registration from '../components/registration.vue'
 import profile from '../components/Profile-student.vue'
 import EmployersList from '../components/EmployersList.vue'
 import StudentSearchPage from '../components/StudentSearchPage.vue'
+import ChangeEmployerCard from '../components/ChangeEmployerCard.vue'
+import ChangeStudentCard from '../components/ChangeStudentCard.vue'
+import EducationalOrganization from '../components/EducationalOrganizations.vue'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
@@ -37,7 +40,22 @@ const routes = [
     path: '/StudentSearchPage',
     name: 'StudentSearchPage',
     component: StudentSearchPage
-  }
+  },
+  {
+    path: '/ChangeEmployerCard',
+    name: 'ChangeEmployerCard',
+    component: ChangeEmployerCard
+  },
+  {
+    path: '/ChangeStudentCard',
+    name: 'ChangeStudentCard',
+    component: ChangeStudentCard
+  },
+  {
+    path: '/EducationalOrganization',
+    name: 'EducationalOrganization',
+    component: EducationalOrganization
+  },
 ]
 
 const router = new VueRouter({

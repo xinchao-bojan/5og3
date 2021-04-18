@@ -7,7 +7,6 @@
             <v-row>
               <h1 class="title1">
                 BoostUP - первый в России сервис по поиску стажировок
-                {{ this.EMPLOYERS[0].description }}
               </h1>
               <!-- <h1>{{EMPLOYERS}}</h1> -->
             </v-row>
@@ -66,7 +65,9 @@
         <v-spacer></v-spacer>
         <v-col cols="1">
           <v-layout justify-end>
-            <v-icon color="#000" large> mdi-arrow-right </v-icon>
+            <router-link to="/EducationalOrganization" class="link">
+              <v-icon color="#000" large> mdi-arrow-right </v-icon>
+            </router-link>
           </v-layout>
         </v-col>
       </v-row>
@@ -86,7 +87,10 @@
       </v-row>
       <v-row>
         <v-col>
-          <InternshipCard />
+          <InternshipCard 
+          v-for="item in this.EMPLOYERS.results"
+                :key="item.id"
+                :internship_data="item"/>
         </v-col>
       </v-row>
       <v-row>
@@ -120,6 +124,9 @@ export default {
     OrganizationCard,
     InternshipCard,
   },
+  data() {
+    return {};
+  },
   methods: {
     next() {},
     ...mapActions(["GET_EMPLOYERS_FROM_API"]),
@@ -131,8 +138,7 @@ export default {
     EMPLOYERS() {
       console.log(
         "WATCHERSUKABLYADTHIS STORE STATE",
-        JSON.parse(JSON.stringify(this.$store.state.employers))[0].id,
-        this.EMPLOYERS[0].description
+        JSON.parse(JSON.stringify(this.$store.state.employers.results))
       );
     },
   },
