@@ -1,8 +1,10 @@
 .git
 .idea
-/venv
+venv/
 /static
 .env
 Lib/
 Scripts/
 __pycache__/
+frontend/
+db.sqlite3
