@@ -42,7 +42,7 @@ class AddStudentMoreView(APIView):
                     date_of_birth=request.data['date']
                 )
 
-                StudentM.objects.create(user=more,
+                StudentM.objects.create(user=more, direction=request.data['direction'],
                                         ed_organization=EdOrganization.objects.get(
                                             name=request.data['ed_organization']))
             except ValidationError:
@@ -85,10 +85,8 @@ class StartPracticeRequestView(generics.ListAPIView):
         return Response(serializer.data)
 
 
-class ListAvailableInternshipView(generics.ListAPIView):
+class ListAvailableInternshipView(APIView):
     permission_classes = [permissions.IsAuthenticated, IsStudent]
-    serializer_class = InternshipSerializer
-    queryset = None
 
     def get(self, request):
         s = StudentM.objects.get(user=StudentMore.objects.get(user=request.user))
@@ -373,7 +371,7 @@ class DetailInternshipStudentView(generics.RetrieveAPIView):
 
 
 class ListInternshipView(generics.ListAPIView):
-    queryset = Internship.objects.all()
+    queryset = Internship.objects.all().order_by('rate')
     serializer_class = InternshipSerializer
     permission_classes = [permissions.IsAuthenticated, IsEmployer]
 
@@ -427,3 +425,9 @@ class CreateReviewOnStudentView(APIView):
         )
         serializer = StudentM(g, context={'request': request})
         return Response(serializer.data)
+
+
+class ListStudentView(generics.ListAPIView):
+    queryset = StudentM.objects.all().order_by('rate')
+    serializer_class = StudentMSerializer
+    permission_classes = [permissions.IsAuthenticated, IsEmployer]

@@ -23,6 +23,7 @@ urlpatterns = [
     path('adviceinternship/<int:pk>/', AdviceForInternshipView.as_view()),
 
     path('listinternship/', ListAvailableInternshipView.as_view()),
+    # path('practice/all/', ListAvailableInternshipView.as_view()),
 
     path('createcompetence/', CreateCompetenceView.as_view()),
 
@@ -39,12 +40,12 @@ urlpatterns = [
 
     path('practice/all/', ListPracticeView.as_view()),
     path('listallinternship/', ListInternshipView.as_view()),
+    path('list/students/', ListStudentView.as_view()),
 
     path('addskill/', AddSkillView.as_view()),
 
     path('oninternshipreview/<int:pk>/', CreateReviewOnInternshipView.as_view()),
     path('onstudentreview/<int:pk>/', CreateReviewOnStudentView.as_view()),
 
-    # path('practice/list/', ListPracticeView.as_view()),
 
 ]

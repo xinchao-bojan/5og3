@@ -94,6 +94,7 @@ SubUser
 class StudentM(models.Model):
     user = models.OneToOneField(StudentMore, on_delete=models.CASCADE)
     ed_organization = models.ForeignKey(EdOrganization, on_delete=models.CASCADE)
+    direction = models.CharField(max_length=255)
     ed_competence = models.ManyToManyField(EdCompetence)
     emp_competence = models.ManyToManyField('EmpCompetence')
     rate = models.DecimalField(default=0, decimal_places=2, max_digits=4, verbose_name='Оценка')
@@ -111,8 +112,7 @@ class StudentM(models.Model):
 
         super().save(*args, **kwargs)
 
-    def __str__(self):
-        return self.ed_organization
+
 
 
 class EmployerM(models.Model):
